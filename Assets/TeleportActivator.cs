@@ -6,6 +6,7 @@ public class TeleportActivator : MonoBehaviour
 {
 
     public XRRayInteractor teleportInteractor;
+    public XRRayInteractor rayInteractor;
     public InputActionProperty teleportActivatorAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,11 +15,23 @@ public class TeleportActivator : MonoBehaviour
         teleportInteractor.gameObject.SetActive(false);
 
         teleportActivatorAction.action.performed += Action_performed;
+
+        rayInteractor.uiHoverEntered.AddListener(x => DisableTeleportRay());
     }
 
     private void Action_performed(InputAction.CallbackContext obj)
     {
+        if (rayInteractor && rayInteractor.IsOverUIGameObject())
+        {
+            return;
+        }
+
         teleportInteractor.gameObject.SetActive(true);
+    }
+
+    public void DisableTeleportRay()
+    {
+        teleportInteractor.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
