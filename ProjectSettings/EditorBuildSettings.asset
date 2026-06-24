@@ -5,9 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Test Scene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 65a9188d3da211b43bc50da168a84fd9
+  - enabled: 1
+    path: Assets/Scenes/Forest Track.unity
+    guid: fdf00a7d976f49d41b024e04630e2079
+  - enabled: 1
+    path: Assets/Scenes/Race Track.unity
+    guid: 7ff5a264cbf6093419e8e6db19321a75
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 608575c0b50abfb4da260f53590886a8, type: 2}
