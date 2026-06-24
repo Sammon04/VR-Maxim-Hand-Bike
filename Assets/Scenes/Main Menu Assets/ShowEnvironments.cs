@@ -48,6 +48,11 @@ public class ShowEnvironments : MonoBehaviour
         photoDisplay.texture = tex;
     }
 
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
     public void LoadForestScene()
     {
         SceneManager.LoadScene("Forest Track");

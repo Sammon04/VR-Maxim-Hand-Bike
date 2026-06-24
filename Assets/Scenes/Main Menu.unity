@@ -851,8 +851,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   EnvironmentsPanel: {fileID: 189577159}
   photoDisplay: {fileID: 0}
-  forestPic: forest.avif
-  raceTrackPic: Race.avif
+  forestPic: forest.jpg
+  raceTrackPic: RaceTrack.jpg
 --- !u!114 &36423824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6339,8 +6339,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   EnvironmentsPanel: {fileID: 53634}
   photoDisplay: {fileID: 0}
-  forestPic: forest.avif
-  raceTrackPic: Race.avif
+  forestPic: forest.jpg
+  raceTrackPic: RaceTrack.jpg
 --- !u!114 &659125547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16743,8 +16743,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   EnvironmentsPanel: {fileID: 405972807}
   photoDisplay: {fileID: 0}
-  forestPic: forest.avif
-  raceTrackPic: Race.avif
+  forestPic: forest.jpg
+  raceTrackPic: RaceTrack.jpg
 --- !u!114 &1635395373
 MonoBehaviour:
   m_ObjectHideFlags: 0
