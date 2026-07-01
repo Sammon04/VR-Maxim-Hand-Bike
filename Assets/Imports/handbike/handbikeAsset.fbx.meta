@@ -3,7 +3,12 @@ guid: be98c388df4b35640a28400b01238e22
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Air Duct Rubber
+    second: {fileID: -2039218799539206217, guid: 7ab6f3b0fd1a6ba41b2a47766c16613f, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
