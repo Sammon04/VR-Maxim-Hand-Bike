@@ -284,8 +284,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.63125014, y: 0.7418836, z: 1.276048}
-  m_Center: {x: -0.060413007, y: 0.89288163, z: -0.08155742}
+  m_Size: {x: 1.049701, y: 1.107999, z: 2.5564501}
+  m_Center: {x: -0.07555199, y: 0.7098439, z: 0.2107166}
 --- !u!1 &12431278
 GameObject:
   m_ObjectHideFlags: 0
@@ -6790,7 +6790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandbikeController
   frontCollider: {fileID: 8442510505448085681}
-  rearLeftCollider: {fileID: 8857944161555192425}
+  rearLeftCollider: {fileID: 0}
   rearRightCollider: {fileID: 6798516453720379886}
   handlebarsMesh: {fileID: 1388646561382505446}
   frontWheelMesh: {fileID: 6951869188933169470}
@@ -12180,7 +12180,7 @@ Transform:
   m_GameObject: {fileID: 2664315667787553765}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000014901161, y: -0.70710677, z: 0.000000016763806, w: 0.7071068}
-  m_LocalPosition: {x: 0.40302217, y: 0.65758735, z: -0.7834862}
+  m_LocalPosition: {x: 0.393, y: 0.658, z: -0.783}
   m_LocalScale: {x: 1.3878609, y: 1.3878607, z: 1.387861}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12775,6 +12775,8 @@ GameObject:
   - component: {fileID: 6798516453720379885}
   - component: {fileID: 6672347236373189148}
   - component: {fileID: 6798516453720379886}
+  - component: {fileID: 6798516453720379888}
+  - component: {fileID: 6798516453720379887}
   m_Layer: 0
   m_Name: Rear Right Tire
   m_TagString: Untagged
@@ -13275,6 +13277,8 @@ GameObject:
   - component: {fileID: 3631933210638075325}
   - component: {fileID: 8442510505448085680}
   - component: {fileID: 8442510505448085681}
+  - component: {fileID: 8442510505448085683}
+  - component: {fileID: 8442510505448085682}
   m_Layer: 0
   m_Name: FrontTire
   m_TagString: Untagged
@@ -13534,8 +13538,74 @@ WheelCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_ProvidesContacts: 0
+--- !u!59 &6798516453720379887
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664315667787553765}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 1245118987}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0.02}
+  m_Axis: {x: 0, y: 0, z: -1}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 0
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: 0
+    max: 0
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 1
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!54 &6798516453720379888
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664315667787553765}
+  serializedVersion: 5
+  m_Mass: 20
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!4 &6951869188933169470
 Transform:
   m_ObjectHideFlags: 0
@@ -13753,6 +13823,8 @@ GameObject:
   - component: {fileID: 8857944161555192424}
   - component: {fileID: 7236462063929497081}
   - component: {fileID: 974584544975976376}
+  - component: {fileID: 8857944161555192427}
+  - component: {fileID: 8857944161555192426}
   - component: {fileID: 8857944161555192425}
   m_Layer: 0
   m_Name: Rear Left Tire
@@ -13946,8 +14018,74 @@ WheelCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_ProvidesContacts: 0
+--- !u!59 &8442510505448085682
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5233112405135800607}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 1245118987}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0.02}
+  m_Axis: {x: 0, y: 0, z: 1}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 1
+  m_UseLimits: 0
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: 0
+    max: 0
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 1
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!54 &8442510505448085683
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5233112405135800607}
+  serializedVersion: 5
+  m_Mass: 20
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8442896027779414505
 GameObject:
   m_ObjectHideFlags: 0
@@ -13990,14 +14128,80 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7959026431738394237}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000014901161, y: -0.70710677, z: 0.000000016763806, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0.4838629, y: 0.65911865, z: -0.7850434}
   m_LocalScale: {x: 1.3878609, y: 1.3878607, z: 1.387861}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1080444927}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!146 &8857944161555192425
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!59 &8857944161555192425
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7959026431738394237}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 1245118987}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0.02}
+  m_Axis: {x: 0, y: 0, z: 1}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 0
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: 0
+    max: 0
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 1
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!54 &8857944161555192426
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7959026431738394237}
+  serializedVersion: 5
+  m_Mass: 20
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!146 &8857944161555192427
 WheelCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14034,7 +14238,7 @@ WheelCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_ProvidesContacts: 0
 --- !u!33 &9081406403247074436
 MeshFilter:
