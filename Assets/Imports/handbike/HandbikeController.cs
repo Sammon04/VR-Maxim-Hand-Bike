@@ -4,18 +4,23 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class HandbikeController : MonoBehaviour
 {
-    public WheelCollider frontCollider;
-    public WheelCollider rearLeftCollider;
-    public WheelCollider rearRightCollider;
-
-    public Transform handlebarsMesh;
-    public Transform frontWheelMesh;
-    public Transform rearLeftWheelMesh;
-    public Transform rearRightWheelMesh;
-
-    public float motorTorque = 150f;
+    public float motorTorque = 10f;
+    public float maxVelocity = 1.0f;
     public float maxSteerAngle = 30f;
-    public float brakeTorque = 200f;
+    public float acceleration = 15f;
+    public float deceleration = 8f;
+    public float brakeTorque = 20f;
+    float currentSpeed = 0f;
+
+    [Header("Wheel Visuals")]
+    public Transform handleBar;
+    public Transform frontWheelPivot;
+    public Transform[] spinningWheels;
+
+    public float WheelRadius = 0.3f;
+    public float maxSteerVisualAngle = 25f;
+    public float steerVisualSpeed = 200f;
+    float currentSteerAngle = 0.0f;
 
     Rigidbody rb;
     Keyboard keyboard;
@@ -23,7 +28,8 @@ public class HandbikeController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.5f, 0);
+        rb.centerOfMass -= new Vector3(0, 0.5f, 0);
+        rb.maxLinearVelocity = maxVelocity;
         keyboard = Keyboard.current;
     }
 
@@ -31,44 +37,55 @@ public class HandbikeController : MonoBehaviour
     {
         if (keyboard == null) return;
 
+        float accelInput = 0f;
+
+        if (keyboard.wKey.isPressed) accelInput += 1f;
+        if (keyboard.sKey.isPressed) accelInput -= 1f;
+
         float steerInput = 0f;
         if (keyboard.dKey.isPressed) steerInput += 1f;
         if (keyboard.aKey.isPressed) steerInput -= 1f;
 
-        float accelInput = 0f;
-        if (keyboard.wKey.isPressed) accelInput += 1f;
-        if (keyboard.sKey.isPressed) accelInput -= 1f;
 
-        frontCollider.steerAngle = steerInput * maxSteerAngle;
+        float targetSpeed = accelInput * motorTorque;
+        float rate = (accelInput != 0f) ? acceleration : deceleration;
+        if (keyboard.spaceKey.isPressed) rate = brakeTorque;
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, rate * Time.fixedDeltaTime);
 
-        if (Mathf.Abs(accelInput) > 0.05f)
-        {
-            frontCollider.motorTorque = accelInput * motorTorque;
-            frontCollider.brakeTorque = 0f;
-        }
-        else
-        {
-            frontCollider.motorTorque = 0f;
-            frontCollider.brakeTorque = brakeTorque;
-        }
+        float speedFactor = Mathf.Clamp01(Mathf.Abs(currentSpeed) / motorTorque);
 
-        UpdateWheelVisual(frontCollider, frontWheelMesh);
-        UpdateWheelVisual(rearLeftCollider, rearLeftWheelMesh);
-        UpdateWheelVisual(rearRightCollider, rearRightWheelMesh);
+        Quaternion turnDelta = Quaternion.Euler(0f, steerInput * maxSteerAngle * speedFactor * Time.fixedDeltaTime, 0f);
+        rb.MoveRotation(rb.rotation * turnDelta);
 
-        if (handlebarsMesh != null)
-            handlebarsMesh.localRotation = Quaternion.Euler(0, frontCollider.steerAngle, 0);
+        Vector3 forward = transform.forward * currentSpeed;
+        rb.linearVelocity = new Vector3(forward.x, rb.linearVelocity.y, forward.z);
+
+        UpdateSteeringVisual(steerInput);
+        UpdateWheelSpin(currentSpeed);
     }
 
-    void UpdateWheelVisual(WheelCollider collider, Transform mesh)
+    void UpdateSteeringVisual(float turnInput)
     {
-        if (mesh == null || collider == null) return;
+        float targetAngle = turnInput * maxSteerVisualAngle;
+        currentSteerAngle = Mathf.MoveTowards(currentSteerAngle, targetAngle, steerVisualSpeed * Time.fixedDeltaTime);
 
-        Vector3 position;
-        Quaternion rotation;
-        collider.GetWorldPose(out position, out rotation);
+        Quaternion steerRotation = Quaternion.Euler(0f, currentSteerAngle, 0f);
 
-        mesh.position = position;
-        mesh.rotation = rotation * Quaternion.Euler(0, 90f, 0);
+        if (handleBar != null) handleBar.localRotation = steerRotation;
+        if (frontWheelPivot != null) frontWheelPivot.localRotation = steerRotation;
+    }
+
+    void UpdateWheelSpin(float currentSpeed)
+    {
+        float spinSpeed = (currentSpeed / WheelRadius) * Mathf.Rad2Deg;
+
+        foreach (Transform wheel in spinningWheels)
+        {
+            if (wheel != null)
+            {
+                wheel.Rotate(Vector3.forward * spinSpeed * Time.fixedDeltaTime, Space.Self);
+            }
+        }
     }
 }
+
