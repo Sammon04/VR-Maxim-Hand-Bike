@@ -93954,6 +93954,50 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.0000014, y: 4.3357325, z: 0.27}
   m_Center: {x: 0.0000038146973, y: 2.1678653, z: -0.01}
+--- !u!1 &1211689028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1211689030}
+  - component: {fileID: 1211689029}
+  m_Layer: 0
+  m_Name: ModeInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1211689029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211689028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9df5ea2251ba04e9a68a037f8b7b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ModeInitializer
+--- !u!4 &1211689030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211689028}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -53.91159, y: 14.97904, z: -23.4219}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1213599131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -108673,9 +108717,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShowEnvironments
   EnvironmentsPanel: {fileID: 0}
-  photoDisplay: {fileID: 0}
-  forestPic: forest.jpg
-  raceTrackPic: RaceTrack.jpg
 --- !u!114 &1971459518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113185,8 +113226,8 @@ SceneRoots:
   - {fileID: 434158884}
   - {fileID: 1271617936}
   - {fileID: 1153095479}
-  - {fileID: 482985729}
   - {fileID: 1111670361}
+  - {fileID: 482985729}
   - {fileID: 2022792809}
   - {fileID: 270932228}
   - {fileID: 2054456372}
@@ -113198,3 +113239,4 @@ SceneRoots:
   - {fileID: 1107990485}
   - {fileID: 2133326030}
   - {fileID: 544685675}
+  - {fileID: 1211689030}
