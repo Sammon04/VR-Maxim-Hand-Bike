@@ -41,6 +41,10 @@ public class HandbikeController : MonoBehaviour
     [Tooltip("Optional thumbstick for steering, e.g. <XRController>{RightHand}/primary2DAxis")]
     public InputActionProperty vrSteerAxis;
 
+    [Header("Ground Contact")]
+    public float groundContactForce = 15f;
+    
+
     Rigidbody rb;
     Keyboard keyboard;
 
@@ -66,7 +70,7 @@ public class HandbikeController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass -= new Vector3(0, 0.5f, 0);
-        rb.maxLinearVelocity = maxVelocity;
+        rb.maxLinearVelocity = 50f;
         keyboard = Keyboard.current;
     }
 
@@ -135,6 +139,7 @@ public class HandbikeController : MonoBehaviour
         }
 
         // --- MOVEMENT EXECUTION ---
+        
         float targetSpeed = accelInput * motorTorque;
         float rate = (accelInput != 0f) ? acceleration : deceleration;
         if (braking) rate = brakeTorque;
@@ -145,9 +150,9 @@ public class HandbikeController : MonoBehaviour
         Quaternion turnDelta = Quaternion.Euler(0f, steerInput * maxSteerAngle * speedFactor * Time.fixedDeltaTime, 0f);
         rb.MoveRotation(rb.rotation * turnDelta);
 
-        Vector3 forward = transform.forward * currentSpeed;
+        Vector3 forward = transform.forward * currentSpeed;    
         rb.linearVelocity = new Vector3(forward.x, rb.linearVelocity.y, forward.z);
-
+        rb.AddForce(Vector3.down * groundContactForce, ForceMode.Acceleration);
         UpdateSteeringVisual(steerInput);
         UpdateWheelSpin(currentSpeed);
     }
