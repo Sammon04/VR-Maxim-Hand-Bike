@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TimeTrialLogic : MonoBehaviour
 {
@@ -21,7 +23,10 @@ public class TimeTrialLogic : MonoBehaviour
 
     [Space(10)]
 
-    [Header("Text")]
+    [Header("UI")]
+    [Tooltip("The UI canvases for the time trial")]
+    [SerializeField] private GameObject timeTrialUI;
+
     [Tooltip("Displays the time elapsed while the time trial is active")]
     [SerializeField] private TextMeshProUGUI timerDisplay;
 
@@ -30,6 +35,14 @@ public class TimeTrialLogic : MonoBehaviour
 
     [Tooltip("Displays text after the time trial is finished")]
     [SerializeField] private TextMeshProUGUI finishDisplay;
+
+    [Tooltip("Displays the leaderboard placeholder text")]
+    [SerializeField] private TextMeshProUGUI leaderboardPlaceholder;
+
+    [Tooltip("Displays the text for returning to the menu after the time trial is finished")]
+    [SerializeField] private TextMeshProUGUI returnToMenuText;
+
+    [SerializeField] private GameObject buttons;
 
     private float timeElapsed = 0.0f;
     private bool raceActive = false;
@@ -46,6 +59,8 @@ public class TimeTrialLogic : MonoBehaviour
     {
         StartCountdown();
         DisplayCountdown(countdownTime);
+        timeTrialUI.transform.SetParent(bike.transform, true);
+        buttons.SetActive(false);
     }
     void Update()
     {
@@ -66,8 +81,7 @@ public class TimeTrialLogic : MonoBehaviour
         if (raceActive)
         {
             timeElapsed += Time.deltaTime;
-            Debug.Log(timeElapsed);
-            timerDisplay.text = timeElapsed.ToString();
+            timerDisplay.text = timeElapsed.ToString("F3");
         }
     }
 
@@ -114,17 +128,29 @@ public class TimeTrialLogic : MonoBehaviour
 
     private void StartTimeTrial()
     {
-        Debug.Log("Race Started");
         raceActive = true; 
     }
 
     private void EndTimeTrial()
     {
-        Debug.Log("Race Finished");
         raceActive = false;
         if (bikeControls) bikeControls.enabled = false;
         timerDisplay.text = "";
-        finishDisplay.text = $"w time trial\nFinal Time: {timeElapsed}";
+        finishDisplay.text = $"Time Trial Complete!\n\nFinal Time: {timeElapsed.ToString("F3")}";
+        leaderboardPlaceholder.text = "Leaderboard Placeholder\n\n1. Player 1 - 00:00.000\n2. Player 2 - 00:00.000\n3. Player 3 - 00:00.000";
+        buttons.SetActive(true);
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+        Debug.Log("loaded main menu");
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("restarted scene");
     }
 
 }
