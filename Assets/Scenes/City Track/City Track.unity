@@ -8020,7 +8020,7 @@ GameObject:
   - component: {fileID: 552874425}
   - component: {fileID: 552874424}
   m_Layer: 0
-  m_Name: Terrain
+  m_Name: Mountain Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
