@@ -1050,7 +1050,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1058,7 +1058,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.368
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7147,7 +7147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8270855663187062767, guid: 1392f805216c47742996d4742c80721c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8270855663187062767, guid: 1392f805216c47742996d4742c80721c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11226,7 +11226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 2
   SceneName: DragStripEnv
 --- !u!114 &796502623
 MonoBehaviour:
@@ -12601,11 +12601,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 892750793}
   m_Mesh: {fileID: 6067928698450671358, guid: be98c388df4b35640a28400b01238e22, type: 3}
---- !u!224 &893462407 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-  m_PrefabInstance: {fileID: 1263998631}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &898103305
 GameObject:
   m_ObjectHideFlags: 0
@@ -12717,7 +12712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 2
   SceneName: Race Track
 --- !u!114 &907508435
 MonoBehaviour:
@@ -17873,127 +17868,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1687017389465272744, guid: 8c95c4bf34b63274ebb4de468bebf3bc, type: 3}
   m_PrefabInstance: {fileID: 1256947787}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1263998631
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1336362213}
-    m_Modifications:
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_keepAlive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_graphyMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_fpsModuleState
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_fpsGraphResolution
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_ramGraphResolution
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872792584817, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_advancedModulePosition
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872802266355, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_Name
-      value: '[Graphy] VR'
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 1080
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.807
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.14898992
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.2058
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707732872824540353, guid: 018247255856540428a6c9bc11629902, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 018247255856540428a6c9bc11629902, type: 3}
 --- !u!1 &1281802581
 GameObject:
   m_ObjectHideFlags: 0
@@ -18046,7 +17920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 0
   SceneName: DragStripEnv
 --- !u!114 &1281802584
 MonoBehaviour:
@@ -18626,8 +18500,7 @@ Transform:
   m_LocalPosition: {x: 0.134, y: -0.215, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 893462407}
+  m_Children: []
   m_Father: {fileID: 549257102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1336362214
@@ -22354,7 +22227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 0
   SceneName: City Track
 --- !u!114 &1554205239
 MonoBehaviour:
@@ -23419,7 +23292,7 @@ Transform:
   m_GameObject: {fileID: 1619462966}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.285, y: 0.007, z: 0.383}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27544,7 +27417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 2
   SceneName: City Track
 --- !u!114 &1884002865
 MonoBehaviour:
@@ -28161,7 +28034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3475118261464492563, guid: 9f3369e30fbd31f4bb596b1a99babe83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3475118261464492563, guid: 9f3369e30fbd31f4bb596b1a99babe83, type: 3}
       propertyPath: m_LocalPosition.y
@@ -28169,7 +28042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3475118261464492563, guid: 9f3369e30fbd31f4bb596b1a99babe83, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.338
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3475118261464492563, guid: 9f3369e30fbd31f4bb596b1a99babe83, type: 3}
       propertyPath: m_LocalRotation.w
@@ -29616,7 +29489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d43a06850fea434abb329840c60d349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentButton
-  mode: 1
+  mode: 0
   SceneName: Race Track
 --- !u!114 &1975768491
 MonoBehaviour:
@@ -30738,6 +30611,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
+  groundContactForce: 15
 --- !u!65 &2045227033
 BoxCollider:
   m_ObjectHideFlags: 0

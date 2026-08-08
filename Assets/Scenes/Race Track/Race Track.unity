@@ -90998,10 +90998,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hand Bike
       objectReference: {fileID: 0}
-    - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 7868406332872344774, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_LocalPosition.x
       value: -35.81
