@@ -35,7 +35,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause(InputAction.CallbackContext obj)
     {
         paused = !paused;
-        //Time.timeScale = paused ? 0f : 1f;
+        Time.timeScale = paused ? 0f : 1f;
         pauseMenuUI.SetActive(paused);
     }
 
@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
 
             return;
         }
-        //Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Main Menu");
     }
 
@@ -94,7 +94,7 @@ public class PauseMenu : MonoBehaviour
 
             return;
         }
-        //Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
