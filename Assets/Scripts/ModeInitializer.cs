@@ -7,7 +7,7 @@ public class ModeInitializer : MonoBehaviour
     //[SerializeField] GameObject npcRaceLogic;
     //[SerializeField] GameObject casualLogic;
 
-    void Start()
+    void Awake()
     {
         switch (ModeSettings.Mode)
         {
