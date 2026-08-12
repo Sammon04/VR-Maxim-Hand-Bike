@@ -140,6 +140,28 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+--- !u!114 &-7833739996201166989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19db6adf5be3433989f34a1788172b2c, type: 3}
+  m_Name: MockInteractionFeature Standalone
+  m_EditorClassIdentifier: Unity.XR.OpenXR.Tests::UnityEngine.XR.OpenXR.Tests.MockInteractionFeature
+  m_enabled: 0
+  nameUi: Mock Interaction Feature
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.mockinteraction
+  openxrExtensionStrings: 
+  company: Unity
+  priority: -2147483648
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &-7100743401138687057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1143,6 +1165,7 @@ MonoBehaviour:
   - {fileID: 8244099864921630434}
   - {fileID: 6189936807668363234}
   - {fileID: -6106500477213290074}
+  - {fileID: -7833739996201166989}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
@@ -1177,6 +1200,28 @@ MonoBehaviour:
   openxrExtensionStrings: XR_EXT_hand_interaction
   company: Unity
   priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
+--- !u!114 &6046820726439534113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19db6adf5be3433989f34a1788172b2c, type: 3}
+  m_Name: MockInteractionFeature Android
+  m_EditorClassIdentifier: Unity.XR.OpenXR.Tests::UnityEngine.XR.OpenXR.Tests.MockInteractionFeature
+  m_enabled: 0
+  nameUi: Mock Interaction Feature
+  version: 0.0.1
+  featureIdInternal: com.unity.openxr.feature.input.mockinteraction
+  openxrExtensionStrings: 
+  company: Unity
+  priority: -2147483648
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
@@ -1371,6 +1416,7 @@ MonoBehaviour:
   - {fileID: 223684414372602889}
   - {fileID: -8981309727720692141}
   - {fileID: 6127295022683153323}
+  - {fileID: 6046820726439534113}
   customLoaderName: 
   m_renderMode: 1
   m_latencyOptimization: 0
