@@ -42,7 +42,8 @@ public class TimeTrialLogic : MonoBehaviour
     [Tooltip("Displays the text for returning to the menu after the time trial is finished")]
     [SerializeField] private TextMeshProUGUI returnToMenuText;
 
-    [SerializeField] private GameObject buttons;
+    [Tooltip("Canvas holding the restart/return to menu buttons")]
+    [SerializeField] private GameObject buttonCanvas;
 
     private float timeElapsed = 0.0f;
     private bool raceActive = false;
@@ -60,7 +61,8 @@ public class TimeTrialLogic : MonoBehaviour
         StartCountdown();
         DisplayCountdown(countdownTime);
         timeTrialUI.transform.SetParent(bike.transform, true);
-        buttons.SetActive(false);
+
+        buttonCanvas.SetActive(false);
     }
     void Update()
     {
@@ -138,7 +140,8 @@ public class TimeTrialLogic : MonoBehaviour
         timerDisplay.text = "";
         finishDisplay.text = $"Time Trial Complete!\n\nFinal Time: {timeElapsed.ToString("F3")}";
         leaderboardPlaceholder.text = "Leaderboard Placeholder\n\n1. Player 1 - 00:00.000\n2. Player 2 - 00:00.000\n3. Player 3 - 00:00.000";
-        buttons.SetActive(true);
+
+        buttonCanvas.SetActive(true);
     }
 
     public void ReturnToMenu()
