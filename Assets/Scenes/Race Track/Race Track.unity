@@ -90994,6 +90994,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 438406917084689452, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 438406917084689452, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438406917084689452, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956081552537029591, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956081552537029591, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: motorTorque
       value: 15
@@ -91001,6 +91021,22 @@ PrefabInstance:
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
       value: Hand Bike
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 7868406332872344774, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_LocalPosition.x
@@ -91041,6 +91077,34 @@ PrefabInstance:
     - target: {fileID: 7868406332872344774, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368128221381247173, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368128221381247173, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368128221381247173, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486292862365455003, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486292862365455003, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486292862365455003, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8973945346099145159, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_Type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
