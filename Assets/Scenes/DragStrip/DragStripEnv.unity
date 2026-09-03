@@ -7379,7 +7379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.082
+      value: 15.86
       objectReference: {fileID: 0}
     - target: {fileID: 2858196090055765119, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_Name
@@ -8753,6 +8753,10 @@ PrefabInstance:
       propertyPath: m_CameraFloorOffsetObject
       value: 
       objectReference: {fileID: 614055700}
+    - target: {fileID: 4892046450645287385, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: settingsMenu
+      value: 
+      objectReference: {fileID: 2125484580}
     - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: maxVelocity
       value: 15
@@ -8827,6 +8831,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+--- !u!1 &2125484580 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5934018241344991275, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+  m_PrefabInstance: {fileID: 2125484579}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2126105919
 PrefabInstance:
   m_ObjectHideFlags: 0

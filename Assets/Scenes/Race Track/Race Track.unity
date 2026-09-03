@@ -82948,6 +82948,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.0000005, y: 4.3357325, z: 0.27}
   m_Center: {x: -0.0000076293945, y: 2.1678662, z: -0.01}
+--- !u!1 &702323596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5934018241344991275, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+  m_PrefabInstance: {fileID: 1113063292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &707248445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91014,6 +91019,10 @@ PrefabInstance:
       propertyPath: m_Colors.m_ColorMultiplier
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4892046450645287385, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: settingsMenu
+      value: 
+      objectReference: {fileID: 702323596}
     - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: motorTorque
       value: 15
