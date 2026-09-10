@@ -91011,6 +91011,14 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 28
       objectReference: {fileID: 0}
+    - target: {fileID: 919563496639164751, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1743704004557113723, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2956081552537029591, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Interactable
       value: 1
@@ -91030,6 +91038,10 @@ PrefabInstance:
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
       value: Hand Bike
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976956179821485080, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_fontSize
@@ -91110,6 +91122,10 @@ PrefabInstance:
     - target: {fileID: 8486292862365455003, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_fontSizeBase
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8927642871268279751, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8973945346099145159, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Type
@@ -102170,16 +102186,44 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.49
+      value: 1.208
       objectReference: {fileID: 0}
     - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.78
+      value: 0.994
       objectReference: {fileID: 0}
     - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.83
+      value: 21.137
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8984787
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.4390171
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -52.082
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424778394833931474, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2858196090055765119, guid: b7e060b947f9e1a40b810ecda941bf37, type: 3}
       propertyPath: m_Name
