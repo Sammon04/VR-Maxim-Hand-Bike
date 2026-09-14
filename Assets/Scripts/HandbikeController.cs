@@ -70,6 +70,8 @@ public class HandbikeController : MonoBehaviour
     float previousCrankAngle = 0f;
     bool wasGrabbing = false;
 
+    Quaternion crankVisualRestRotation = Quaternion.identity;
+
     void OnEnable()
     {
         leftGripHeld.action?.Enable();
@@ -90,6 +92,9 @@ public class HandbikeController : MonoBehaviour
         rb.centerOfMass -= new Vector3(0, 0.5f, 0);
         rb.maxLinearVelocity = maxVelocity;
         keyboard = Keyboard.current;
+
+        if (crankVisual != null)
+            crankVisualRestRotation = crankVisual.localRotation;
     }
 
     void FixedUpdate()
@@ -130,7 +135,7 @@ public class HandbikeController : MonoBehaviour
 
                 // spin the visual crank arm to match where the hands currently are
                 if (crankVisual != null)
-                    crankVisual.localRotation = Quaternion.AngleAxis(currentCrankAngle, crankVisualAxis);
+                    crankVisual.localRotation = crankVisualRestRotation * Quaternion.AngleAxis(currentCrankAngle, crankVisualAxis);
 
                 if (wasGrabbing)
                 {
