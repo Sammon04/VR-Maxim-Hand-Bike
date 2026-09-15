@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.IO;
 
 public class TimeTrialLogic : MonoBehaviour
 {
@@ -19,7 +21,13 @@ public class TimeTrialLogic : MonoBehaviour
 
     [Header("Values")]
     [Tooltip("Amount of time to count down before giving the player control")]
-    [SerializeField] private float countdownTime = 0.0f;  
+    [SerializeField] private float countdownTime = 0.0f;
+
+    [Tooltip("File name used to store this level's leaderboard (saved under Application.persistentDataPath")]
+    [SerializeField] private string leaderboardFileName = "TimeTrial_Leaderboard_Level1.json";
+
+    [Tooltip("Max number of entries kept on the leaderboard")]
+    [SerializeField] private int maxLeaderboardEntries = 5;
 
     [Space(10)]
 
@@ -49,6 +57,38 @@ public class TimeTrialLogic : MonoBehaviour
     private bool raceActive = false;
     private bool countingDown = false;
     private HandbikeController bikeControls;
+
+    [System.Serializable]
+    private class LeaderboardEntry
+    {
+        public string playerName;
+        public float time;
+    }
+
+    [System.Serializable]
+    private class LeaderboardData
+    {
+        public List<LeaderboardEntry> entries = new List<LeaderboardEntry>();
+    }
+
+    private string LeaderboardFilePath
+    {
+        get
+        {
+            string fileName = $"Leaderboard_{SceneManager.GetActiveScene().name}.json";
+#if UNITY_EDITOR
+            string scriptsFolder = Path.Combine(Application.dataPath, "Scripts");
+            if (!Directory.Exists(scriptsFolder))
+            {
+                Directory.CreateDirectory(scriptsFolder);
+            }
+            return Path.Combine(scriptsFolder, fileName);
+#else       
+            return Path.Combine(Application.persistentDataPath, fileName);
+#endif
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -139,9 +179,74 @@ public class TimeTrialLogic : MonoBehaviour
         if (bikeControls) bikeControls.enabled = false;
         timerDisplay.text = "";
         finishDisplay.text = $"Time Trial Complete!\n\nFinal Time: {timeElapsed.ToString("F3")}";
-        leaderboardPlaceholder.text = "Leaderboard Placeholder\n\n1. Player 1 - 00:00.000\n2. Player 2 - 00:00.000\n3. Player 3 - 00:00.000";
+        
+        SaveTimeToLeaderboard(timeElapsed);
+        DisplayLeaderboard();
 
         buttonCanvas.SetActive(true);
+    }
+
+    private LeaderboardData LoadLeaderboard()
+    {
+        if (File.Exists(LeaderboardFilePath))
+        {
+            string json = File.ReadAllText(LeaderboardFilePath);
+            return JsonUtility.FromJson<LeaderboardData>(json);
+        }
+        return new LeaderboardData();
+    }
+
+    private void SaveLeaderboard(LeaderboardData data)
+    {
+        string json = JsonUtility.ToJson(data, true);
+        File.WriteAllText(LeaderboardFilePath, json);
+    }
+
+    private void SaveTimeToLeaderboard(float time)
+    {
+        LeaderboardData data = LoadLeaderboard();
+        
+        data.entries.Add(new LeaderboardEntry
+        {
+            playerName = "Player",
+            time = time
+        });
+
+        data.entries.Sort((a,b) => a.time.CompareTo(b.time)); // fastest time first
+        
+        if (data.entries.Count > maxLeaderboardEntries)
+        {
+            data.entries.RemoveRange(maxLeaderboardEntries, data.entries.Count - maxLeaderboardEntries);
+        }
+
+        SaveLeaderboard(data);
+    }
+
+    private void DisplayLeaderboard()
+    {
+        LeaderboardData data = LoadLeaderboard();
+
+        string text = "Leaderboard\n\n";
+
+        if (data.entries.Count == 0)
+        {
+            text += "No times recorded yet.";
+        }
+        else
+        {
+            for (int i = 0; i < data.entries.Count; i++)
+            {
+                text += $"{i + 1}. {data.entries[i].playerName} - {FormatTime(data.entries[i].time)}\n";
+            }
+        }
+        leaderboardPlaceholder.text = text;
+    }
+
+    private string FormatTime(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60f);
+        float seconds = time % 60f;
+        return $"{minutes:00}:{seconds:00.000}";
     }
 
     public void ReturnToMenu()
