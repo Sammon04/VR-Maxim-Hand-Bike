@@ -28,10 +28,16 @@ public class AIBikeController : MonoBehaviour
 
     [Header("Movement")]
     [Tooltip("Forward thrust force applied toward the current checkpoint.")]
-    public float driveForce = 4000f;
+    public float accelForce = 4000f;
 
-    [Tooltip("Max speed in units/sec.")]
-    public float maxSpeed = 20f;
+    [Tooltip("Target speed in units/sec.")]
+    public float targetSpeed = 20f;
+
+    [Tooltip("Max target speed variance applied at each checkpoint")]
+    public float speedVariance = 2f;
+
+    [Tooltip("Maximum target speed range")]
+    public float maxSpeedVariance = 5f;
 
     [Tooltip("How fast the bike rotates to face its target direction (degrees/sec).")]
     public float turnSpeed = 120f;
@@ -42,6 +48,7 @@ public class AIBikeController : MonoBehaviour
     public float turnSlowdownFactor = 0.6f;
 
     private Rigidbody rb;
+    private float currentTargetSpeed;
     private int currentCheckpointIndex = 0;
     private Vector3 currentTargetPoint;
     private bool stopped = false;
@@ -54,6 +61,11 @@ public class AIBikeController : MonoBehaviour
         {
             PickTargetPoint();
         }
+    }
+
+    private void Start()
+    {
+        SetTargetSpeed();
     }
 
     private void FixedUpdate()
@@ -76,13 +88,15 @@ public class AIBikeController : MonoBehaviour
         Vector3 direction = toTarget.normalized;
 
         RotateTowards(direction);
-        ApplyDriveForce(direction);
+        ApplyaccelForce(direction);
         ClampSpeed();
     }
 
     private void AdvanceCheckpoint()
     {
         currentCheckpointIndex++;
+
+        SetTargetSpeed();
 
         if (currentCheckpointIndex >= checkpoints.Count)
         {
@@ -133,14 +147,14 @@ public class AIBikeController : MonoBehaviour
         rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
     }
 
-    private void ApplyDriveForce(Vector3 direction)
+    private void ApplyaccelForce(Vector3 direction)
     {
         // Scale force down when the bike isn't facing the target much,
         // so it slows into turns instead of muscling through them.
         float facingAlignment = Vector3.Dot(transform.forward, direction); // -1 to 1
         float turnFactor = Mathf.Lerp(1f - turnSlowdownFactor, 1f, Mathf.Clamp01((facingAlignment + 1f) / 2f));
 
-        rb.AddForce(direction * driveForce * turnFactor, ForceMode.Force);
+        rb.AddForce(direction * accelForce * turnFactor, ForceMode.Force);
     }
 
     private void ClampSpeed()
@@ -148,11 +162,17 @@ public class AIBikeController : MonoBehaviour
         Vector3 flatVelocity = rb.linearVelocity;
         flatVelocity.y = 0f;
 
-        if (flatVelocity.magnitude > maxSpeed)
+        if (flatVelocity.magnitude > currentTargetSpeed)
         {
-            Vector3 clamped = flatVelocity.normalized * maxSpeed;
+            Vector3 clamped = flatVelocity.normalized * currentTargetSpeed;
             rb.linearVelocity = new Vector3(clamped.x, rb.linearVelocity.y, clamped.z);
         }
+    }
+
+    private void SetTargetSpeed()
+    {
+        currentTargetSpeed = currentTargetSpeed + Random.Range(-speedVariance, speedVariance);
+        currentTargetSpeed = Mathf.Clamp(currentTargetSpeed, targetSpeed - maxSpeedVariance, targetSpeed + maxSpeedVariance);
     }
 
     private void OnDrawGizmosSelected()
@@ -163,7 +183,6 @@ public class AIBikeController : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, gizmoTarget);
-        Gizmos.DrawWireSphere(gizmoTarget, 0.5f);
-        Gizmos.DrawWireSphere(checkpoints[currentCheckpointIndex].position, checkpointReachDistance);
+        Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
     }
 }
