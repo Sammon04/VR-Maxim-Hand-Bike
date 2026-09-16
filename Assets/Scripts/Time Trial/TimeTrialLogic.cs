@@ -29,6 +29,13 @@ public class TimeTrialLogic : MonoBehaviour
     [Tooltip("Max number of entries kept on the leaderboard")]
     [SerializeField] private int maxLeaderboardEntries = 5;
 
+    [Header("Name Entry")]
+    [Tooltip("Input field the player types their name into via the spatial keyboard")]
+    [SerializeField] private TMP_InputField nameInputField;
+
+    [Tooltip("Canvas holding the name entry UI (input field + confirm button")]
+    [SerializeField] private GameObject nameEntryCanvas;
+
     [Space(10)]
 
     [Header("UI")]
@@ -179,11 +186,18 @@ public class TimeTrialLogic : MonoBehaviour
         if (bikeControls) bikeControls.enabled = false;
         timerDisplay.text = "";
         finishDisplay.text = $"Time Trial Complete!\n\nFinal Time: {timeElapsed.ToString("F3")}";
-        
-        SaveTimeToLeaderboard(timeElapsed);
-        DisplayLeaderboard();
 
-        buttonCanvas.SetActive(true);
+        nameEntryCanvas.SetActive(true); // shows the name input ui first before saving
+    }
+
+    public void ConfirmName()
+    {
+        string playerName = string.IsNullOrWhiteSpace(nameInputField.text) ? "Player" : nameInputField.text;
+
+        nameEntryCanvas.SetActive(false);
+
+        SaveTimeToLeaderboard(timeElapsed, playerName);
+        DisplayLeaderboard();
     }
 
     private LeaderboardData LoadLeaderboard()
@@ -202,13 +216,13 @@ public class TimeTrialLogic : MonoBehaviour
         File.WriteAllText(LeaderboardFilePath, json);
     }
 
-    private void SaveTimeToLeaderboard(float time)
+    private void SaveTimeToLeaderboard(float time, string playerName)
     {
         LeaderboardData data = LoadLeaderboard();
         
         data.entries.Add(new LeaderboardEntry
         {
-            playerName = "Player",
+            playerName = playerName,
             time = time
         });
 
