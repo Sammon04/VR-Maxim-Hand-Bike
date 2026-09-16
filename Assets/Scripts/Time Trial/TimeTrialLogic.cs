@@ -33,7 +33,7 @@ public class TimeTrialLogic : MonoBehaviour
     [Tooltip("Input field the player types their name into via the spatial keyboard")]
     [SerializeField] private TMP_InputField nameInputField;
 
-    [Tooltip("Canvas holding the name entry UI (input field + confirm button")]
+    [Tooltip("Canvas holding the name entry UI (input field and confirm button")]
     [SerializeField] private GameObject nameEntryCanvas;
 
     [Space(10)]
@@ -110,6 +110,7 @@ public class TimeTrialLogic : MonoBehaviour
         timeTrialUI.transform.SetParent(bike.transform, true);
 
         buttonCanvas.SetActive(false);
+        nameEntryCanvas.SetActive(false);
     }
     void Update()
     {
@@ -192,7 +193,7 @@ public class TimeTrialLogic : MonoBehaviour
 
     public void ConfirmName()
     {
-        string playerName = string.IsNullOrWhiteSpace(nameInputField.text) ? "Player" : nameInputField.text;
+        string playerName = string.IsNullOrWhiteSpace(nameInputField.text) ? "Player" : nameInputField.text.Trim();
 
         nameEntryCanvas.SetActive(false);
 
