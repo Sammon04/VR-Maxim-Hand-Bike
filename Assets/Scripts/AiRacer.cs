@@ -74,7 +74,7 @@ public class AIBikeController : MonoBehaviour
         if (stopped) return;
 
         Vector3 toTarget = currentTargetPoint - rb.position;
-        toTarget.y = 0f; // ignore vertical difference, this is ground-plane movement
+        //toTarget.y = 0f; // ignore vertical difference, this is ground-plane movement
 
         float distance = toTarget.magnitude;
 
@@ -86,6 +86,8 @@ public class AIBikeController : MonoBehaviour
         }
 
         Vector3 direction = toTarget.normalized;
+        Vector3 flatDirection = direction;
+                flatDirection.y = 0f;
 
         RotateTowards(direction);
         ApplyaccelForce(direction);
