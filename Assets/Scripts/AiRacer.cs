@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -47,15 +48,24 @@ public class AIBikeController : MonoBehaviour
     [Range(0f, 1f)]
     public float turnSlowdownFactor = 0.6f;
 
+    [Header("Visuals")]
+    [Tooltip("List of transforms for rotating the wheel components")]
+    public Transform[] wheels;
+
     private Rigidbody rb;
     private float currentTargetSpeed;
     private int currentCheckpointIndex = 0;
     private Vector3 currentTargetPoint;
     private bool stopped = false;
+    private float wheelRadius = 1.0f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         if (checkpoints.Count > 0)
         {
@@ -74,7 +84,6 @@ public class AIBikeController : MonoBehaviour
         if (stopped) return;
 
         Vector3 toTarget = currentTargetPoint - rb.position;
-        //toTarget.y = 0f; // ignore vertical difference, this is ground-plane movement
 
         float distance = toTarget.magnitude;
 
@@ -86,12 +95,11 @@ public class AIBikeController : MonoBehaviour
         }
 
         Vector3 direction = toTarget.normalized;
-        Vector3 flatDirection = direction;
-                flatDirection.y = 0f;
 
         RotateTowards(direction);
-        ApplyaccelForce(direction);
+        ApplyAccelForce(direction);
         ClampSpeed();
+        SpinWheels(-Vector3.Dot(rb.linearVelocity, transform.forward));
     }
 
     private void AdvanceCheckpoint()
@@ -135,9 +143,10 @@ public class AIBikeController : MonoBehaviour
         Vector3 half = box.size * 0.5f;
 
         float x = Random.Range(-half.x + edgePadding, half.x - edgePadding);
+        float y = half.y;
         float z = Random.Range(-half.z + edgePadding, half.z - edgePadding);
 
-        Vector3 localPoint = box.center + new Vector3(x, 0f, z);
+        Vector3 localPoint = box.center + new Vector3(x, -y, z);
         currentTargetPoint = checkpoint.TransformPoint(localPoint);
     }
 
@@ -149,7 +158,7 @@ public class AIBikeController : MonoBehaviour
         rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
     }
 
-    private void ApplyaccelForce(Vector3 direction)
+    private void ApplyAccelForce(Vector3 direction)
     {
         // Scale force down when the bike isn't facing the target much,
         // so it slows into turns instead of muscling through them.
@@ -161,13 +170,10 @@ public class AIBikeController : MonoBehaviour
 
     private void ClampSpeed()
     {
-        Vector3 flatVelocity = rb.linearVelocity;
-        flatVelocity.y = 0f;
 
-        if (flatVelocity.magnitude > currentTargetSpeed)
+        if (rb.linearVelocity.magnitude > currentTargetSpeed)
         {
-            Vector3 clamped = flatVelocity.normalized * currentTargetSpeed;
-            rb.linearVelocity = new Vector3(clamped.x, rb.linearVelocity.y, clamped.z);
+            rb.linearVelocity = rb.linearVelocity.normalized * currentTargetSpeed;
         }
     }
 
@@ -186,5 +192,18 @@ public class AIBikeController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, gizmoTarget);
         Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
+    }
+
+    private void SpinWheels(float currentSpeed)
+    {
+        float spinSpeed = currentSpeed / wheelRadius * Mathf.Rad2Deg;
+
+        foreach (Transform wheel in wheels)
+        {
+            if (wheel != null)
+            {
+                wheel.Rotate(Vector3.forward * spinSpeed * Time.fixedDeltaTime, Space.Self);
+            }
+        }
     }
 }
