@@ -9,8 +9,12 @@ using UnityEngine;
 /// player input.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class AIBikeController : MonoBehaviour
+public class AIRacer : MonoBehaviour
 {
+    [Header("Race Mode Values")]
+    [Tooltip("The name used to uniquely identify this racer in the race manager.")]
+    public string racerName = "AI Racer";
+
     [Header("Checkpoints")]
     [Tooltip("Ordered list of checkpoint transforms this racer will target in sequence.")]
     public List<Transform> checkpoints = new List<Transform>();
@@ -52,11 +56,15 @@ public class AIBikeController : MonoBehaviour
     [Tooltip("List of transforms for rotating the wheel components")]
     public Transform[] wheels;
 
+    [HideInInspector] public int lapsCompleted = 0;
+    [HideInInspector] public float distanceToTarget = 0f;
+    [HideInInspector] public int currentCheckpointIndex = 0;
+    [HideInInspector] public bool finished;
+    [HideInInspector] public int totalLaps = 1;
+
     private Rigidbody rb;
     private float currentTargetSpeed;
-    private int currentCheckpointIndex = 0;
     private Vector3 currentTargetPoint;
-    private bool stopped = false;
     private float wheelRadius = 1.0f;
 
     private void Awake()
@@ -81,14 +89,14 @@ public class AIBikeController : MonoBehaviour
     private void FixedUpdate()
     {
         if (checkpoints.Count == 0) return;
-        if (stopped) return;
+        if (finished) return;
 
         Vector3 toTarget = currentTargetPoint - rb.position;
 
-        float distance = toTarget.magnitude;
+        distanceToTarget = toTarget.magnitude;
 
         // Advance to next checkpoint if close enough
-        if (distance <= checkpointReachDistance)
+        if (distanceToTarget <= checkpointReachDistance)
         {
             AdvanceCheckpoint();
             return; // recalc next physics step with the new target
@@ -106,21 +114,27 @@ public class AIBikeController : MonoBehaviour
     {
         currentCheckpointIndex++;
 
-        SetTargetSpeed();
+        if (lapsCompleted >= totalLaps)
+        {
+            finished = true;
+            return;
+        }
 
         if (currentCheckpointIndex >= checkpoints.Count)
         {
             if (loopCheckpoints)
             {
                 currentCheckpointIndex = 0;
+                lapsCompleted++;
             }
             else
             {
                 currentCheckpointIndex--;
-                stopped = true;
+                finished = true;
             }
         }
 
+        SetTargetSpeed();
         PickTargetPoint();
     }
 
