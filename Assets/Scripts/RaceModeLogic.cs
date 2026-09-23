@@ -1,37 +1,64 @@
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.UnifiedRayTracing;
 
 public class RaceModeLogic : MonoBehaviour
 {
+    public static RaceModeLogic Instance { get; private set; }
 
     [Header("Race Settings")]
     [Tooltip("Number of laps in the race.")]
-    public int totalLaps = 3;
+    [SerializeField] private int totalLaps = 3;
 
-    [Tooltip("List of racers in the race. This can include both player and AI racers.")]
-    public List<AIRacer> racers = new List<AIRacer>();
-
+    [Header("UI")]
     [Tooltip("Text object for the standings display.")]
-    public TextMeshProUGUI standingsText;
+    [SerializeField] private TextMeshProUGUI standingsText;
 
-    private readonly List<AIRacer> finishedOrder = new List<AIRacer>();
-    private readonly List<AIRacer> racing = new List<AIRacer>();
-    private readonly List<AIRacer> newlyFinished = new List<AIRacer>();
-    private readonly List<AIRacer> standings = new List<AIRacer>();
-    public IReadOnlyList<AIRacer> Standings => standings;
+    // Populated via Register()/Unregister() rather than the Inspector,
+    // since interfaces (IRacer) can't be serialized by Unity.
+    private readonly List<IRacer> racers = new List<IRacer>();
+    private readonly List<IRacer> finishedOrder = new List<IRacer>();
+    private readonly List<IRacer> racing = new List<IRacer>();
+    private readonly List<IRacer> newlyFinished = new List<IRacer>();
+    private readonly List<IRacer> standings = new List<IRacer>();
+
+    public IReadOnlyList<IRacer> Standings => standings;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    public void Register(IRacer racer)
+    {
+        if (!racers.Contains(racer)) racers.Add(racer);
+    }
+
+    public void Unregister(IRacer racer)
+    {
+        racers.Remove(racer);
+        finishedOrder.Remove(racer);
+    }
 
     private void Start()
     {
         foreach (var racer in racers)
         {
-            racer.totalLaps = totalLaps;
-            racer.loopCheckpoints = totalLaps > 1 ? true : false;
+            if (racer is AIRacer aiRacer)
+            {
+                aiRacer.totalLaps = totalLaps;
+                aiRacer.loopCheckpoints = totalLaps > 1;
+            }
         }
     }
 
-    void Update()
+    private void Update()
     {
         UpdateStandings();
 
@@ -46,9 +73,9 @@ public class RaceModeLogic : MonoBehaviour
         racing.Clear();
         newlyFinished.Clear();
 
-        foreach (AIRacer r in racers)
+        foreach (IRacer r in racers)
         {
-            if (!r.finished)
+            if (!r.Finished)
             {
                 racing.Add(r);
             }
@@ -71,31 +98,31 @@ public class RaceModeLogic : MonoBehaviour
         standings.AddRange(racing);
     }
 
-    private static int CompareRacers(AIRacer a, AIRacer b)
+    private static int CompareRacers(IRacer a, IRacer b)
     {
-        int lapCompare = b.lapsCompleted.CompareTo(a.lapsCompleted);
+        int lapCompare = b.LapsCompleted.CompareTo(a.LapsCompleted);
         if (lapCompare != 0) return lapCompare;
 
-        int checkpointCompare = b.currentCheckpointIndex.CompareTo(a.currentCheckpointIndex);
+        int checkpointCompare = b.CurrentCheckpointIndex.CompareTo(a.CurrentCheckpointIndex);
         if (checkpointCompare != 0) return checkpointCompare;
 
-        int distanceCompare = a.distanceToTarget.CompareTo(b.distanceToTarget);
+        int distanceCompare = a.DistanceToTarget.CompareTo(b.DistanceToTarget);
         if (distanceCompare != 0) return distanceCompare;
 
-        return string.CompareOrdinal(a.racerName, b.racerName);
+        return string.CompareOrdinal(a.RacerName, b.RacerName);
     }
 
-    public int GetPosition(AIRacer racer)
+    public int GetPosition(IRacer racer)
     {
         return standings.IndexOf(racer) + 1;
     }
 
     public string GetStandingsText()
     {
-        var sb = new System.Text.StringBuilder();
+        var sb = new StringBuilder();
         for (int i = 0; i < standings.Count; i++)
         {
-            sb.AppendLine($"{i + 1}. {standings[i].racerName}");
+            sb.AppendLine($"{i + 1}. {standings[i].RacerName}");
         }
         return sb.ToString();
     }

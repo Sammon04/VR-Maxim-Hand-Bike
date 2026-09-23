@@ -1,76 +1,78 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// Basic AI bike racer: slides toward the current checkpoint using a constant
-/// forward force, rotates to face its direction of travel, and clamps to a max speed.
-/// Attach to the same rigidbody-driven bike object used for the player, minus
-/// player input.
-/// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class AIRacer : MonoBehaviour
+public class AIRacer : MonoBehaviour, IRacer
 {
     [Header("Race Mode Values")]
     [Tooltip("The name used to uniquely identify this racer in the race manager.")]
-    public string racerName = "AI Racer";
+    [SerializeField] private string racerName = "AI Racer";
 
     [Header("Checkpoints")]
     [Tooltip("Ordered list of checkpoint transforms this racer will target in sequence.")]
-    public List<Transform> checkpoints = new List<Transform>();
+    [SerializeField] private List<Transform> checkpoints = new List<Transform>();
 
     [Tooltip("Distance at which the AI considers a checkpoint 'reached' and advances to the next.")]
-    public float checkpointReachDistance = 5f;
+    [SerializeField] private float checkpointReachDistance = 5f;
 
-    [Tooltip("Loop back to checkpoint 0 after the last one (for lap-based tracks).")]
+    [Tooltip("Loop back to checkpoint 0 after the last one (for lap-based tracks). Set externally by RaceModeLogic based on totalLaps.")]
     public bool loopCheckpoints = true;
 
     [Header("Checkpoint Targeting")]
-    // Each checkpoint should have a BoxCollider stretched to the track width.
-    // The AI picks a random point inside it (local X/Z) as its actual target.
     [Tooltip("Inset from the checkpoint cube's edges (local units) so targets don't land right against the track boundary.")]
-    public float edgePadding = 1f;
+    [SerializeField] private float edgePadding = 1f;
 
     [Header("Movement")]
     [Tooltip("Forward thrust force applied toward the current checkpoint.")]
-    public float accelForce = 4000f;
+    [SerializeField] private float accelForce = 4000f;
 
     [Tooltip("Target speed in units/sec.")]
-    public float targetSpeed = 20f;
+    [SerializeField] private float targetSpeed = 20f;
 
     [Tooltip("Max target speed variance applied at each checkpoint")]
-    public float speedVariance = 2f;
+    [SerializeField] private float speedVariance = 2f;
 
     [Tooltip("Maximum target speed range")]
-    public float maxSpeedVariance = 5f;
+    [SerializeField] private float maxSpeedVariance = 5f;
 
     [Tooltip("How fast the bike rotates to face its target direction (degrees/sec).")]
-    public float turnSpeed = 120f;
+    [SerializeField] private float turnSpeed = 120f;
 
     [Header("Turning behavior")]
     [Tooltip("Slow down on sharp turns. 1 = full slowdown on a 180 turn, 0 = no slowdown.")]
     [Range(0f, 1f)]
-    public float turnSlowdownFactor = 0.6f;
+    [SerializeField] private float turnSlowdownFactor = 0.6f;
 
     [Header("Visuals")]
     [Tooltip("List of transforms for rotating the wheel components")]
-    public Transform[] wheels;
+    [SerializeField] private Transform[] wheels;
 
-    [HideInInspector] public int lapsCompleted = 0;
-    [HideInInspector] public float distanceToTarget = 0f;
-    [HideInInspector] public int currentCheckpointIndex = 0;
-    [HideInInspector] public bool finished;
-    [HideInInspector] public int totalLaps = 1;
+    /*
+    IRacer values.
+    These are updated internally by this script and read by RaceModeLogic
+    through the interface properties below to determine standings.
+    */
+    private int lapsCompleted = 0;
+    private float distanceToTarget = 0f;
+    private int currentCheckpointIndex = 0;
+    private bool finished;
+
+    public string RacerName => racerName;
+    public int CurrentCheckpointIndex => currentCheckpointIndex;
+    public float DistanceToTarget => distanceToTarget;
+    public int LapsCompleted => lapsCompleted;
+    public bool Finished => finished;
+
+    [HideInInspector] public int totalLaps = 1; // Set externally by RaceModeLogic.
 
     private Rigidbody rb;
     private float currentTargetSpeed;
     private Vector3 currentTargetPoint;
-    private float wheelRadius = 1.0f;
+    private readonly float wheelRadius = 1.0f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -83,27 +85,33 @@ public class AIRacer : MonoBehaviour
 
     private void Start()
     {
+        RaceModeLogic.Instance.Register(this);
+        currentTargetSpeed = targetSpeed;
         SetTargetSpeed();
+    }
+
+    private void OnDestroy()
+    {
+        if (RaceModeLogic.Instance != null)
+        {
+            RaceModeLogic.Instance.Unregister(this);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (checkpoints.Count == 0) return;
-        if (finished) return;
+        if (checkpoints.Count == 0 || finished) return;
 
         Vector3 toTarget = currentTargetPoint - rb.position;
-
         distanceToTarget = toTarget.magnitude;
 
-        // Advance to next checkpoint if close enough
         if (distanceToTarget <= checkpointReachDistance)
         {
             AdvanceCheckpoint();
-            return; // recalc next physics step with the new target
+            return;
         }
 
         Vector3 direction = toTarget.normalized;
-
         RotateTowards(direction);
         ApplyAccelForce(direction);
         ClampSpeed();
@@ -138,11 +146,6 @@ public class AIRacer : MonoBehaviour
         PickTargetPoint();
     }
 
-    /// <summary>
-    /// Picks a random point within the current checkpoint's BoxCollider bounds
-    /// (local X/Z, inset by edgePadding) and converts it to world space.
-    /// Falls back to the checkpoint's transform position if it has no BoxCollider.
-    /// </summary>
     private void PickTargetPoint()
     {
         Transform checkpoint = checkpoints[currentCheckpointIndex];
@@ -155,7 +158,6 @@ public class AIRacer : MonoBehaviour
         }
 
         Vector3 half = box.size * 0.5f;
-
         float x = Random.Range(-half.x + edgePadding, half.x - edgePadding);
         float y = half.y;
         float z = Random.Range(-half.z + edgePadding, half.z - edgePadding);
@@ -184,7 +186,6 @@ public class AIRacer : MonoBehaviour
 
     private void ClampSpeed()
     {
-
         if (rb.linearVelocity.magnitude > currentTargetSpeed)
         {
             rb.linearVelocity = rb.linearVelocity.normalized * currentTargetSpeed;
@@ -193,19 +194,8 @@ public class AIRacer : MonoBehaviour
 
     private void SetTargetSpeed()
     {
-        currentTargetSpeed = currentTargetSpeed + Random.Range(-speedVariance, speedVariance);
+        currentTargetSpeed += Random.Range(-speedVariance, speedVariance);
         currentTargetSpeed = Mathf.Clamp(currentTargetSpeed, targetSpeed - maxSpeedVariance, targetSpeed + maxSpeedVariance);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (checkpoints.Count == 0 || currentCheckpointIndex >= checkpoints.Count) return;
-
-        Vector3 gizmoTarget = Application.isPlaying ? currentTargetPoint : checkpoints[currentCheckpointIndex].position;
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, gizmoTarget);
-        Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
     }
 
     private void SpinWheels(float currentSpeed)
@@ -219,5 +209,16 @@ public class AIRacer : MonoBehaviour
                 wheel.Rotate(Vector3.forward * spinSpeed * Time.fixedDeltaTime, Space.Self);
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (checkpoints.Count == 0 || currentCheckpointIndex >= checkpoints.Count) return;
+
+        Vector3 gizmoTarget = Application.isPlaying ? currentTargetPoint : checkpoints[currentCheckpointIndex].position;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, gizmoTarget);
+        Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
     }
 }
