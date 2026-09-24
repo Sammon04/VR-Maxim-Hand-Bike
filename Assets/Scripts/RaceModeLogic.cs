@@ -55,6 +55,11 @@ public class RaceModeLogic : MonoBehaviour
                 aiRacer.totalLaps = totalLaps;
                 aiRacer.loopCheckpoints = totalLaps > 1;
             }
+            if (racer is PlayerRacer plrRacer)
+            {
+                plrRacer.totalLaps = totalLaps;
+                plrRacer.loopCheckpoints = totalLaps > 1;
+            }
         }
     }
 
