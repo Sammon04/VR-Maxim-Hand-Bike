@@ -2226,6 +2226,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3975892569543679517, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 82161546fc9de4e73bb1d59e85625a4f, type: 2}
     - target: {fileID: 5470907239156561636, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: racerName
       value: Guy
