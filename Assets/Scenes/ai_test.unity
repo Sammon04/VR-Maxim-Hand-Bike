@@ -973,6 +973,10 @@ PrefabInstance:
       propertyPath: 'checkpoints.Array.data[7]'
       value: 
       objectReference: {fileID: 1481456582}
+    - target: {fileID: 2747185861230389012, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
       value: Hand Bike
@@ -2058,6 +2062,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 620365715984814844, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8024603c5e2b44639ab0ed488ded2dc4, type: 2}
     - target: {fileID: 1370415666835696410, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: m_LocalPosition.x
       value: -60.5
@@ -2098,6 +2106,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1482256794102406735, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 82161546fc9de4e73bb1d59e85625a4f, type: 2}
+    - target: {fileID: 3975892569543679517, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9270be6f570554f7f887c4f81f95a8f6, type: 2}
     - target: {fileID: 5470907239156561636, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: racerName
       value: Faggot
@@ -2311,6 +2327,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 620365715984814844, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ddefd2737a7c1400490f894a03ee5008, type: 2}
     - target: {fileID: 1370415666835696410, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: m_LocalPosition.x
       value: -59.54
@@ -2351,6 +2371,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1482256794102406735, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ddefd2737a7c1400490f894a03ee5008, type: 2}
+    - target: {fileID: 3975892569543679517, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 13fd3daf6ffea4799916ce7503f7f33c, type: 2}
     - target: {fileID: 5470907239156561636, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: racerName
       value: Phil
@@ -2518,6 +2546,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1482256794102406735, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3d8ff942f4384e889c1bb1a78b4285b, type: 2}
+    - target: {fileID: 3975892569543679517, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b4d24c6c1d935478d97c29fabadf8a46, type: 2}
     - target: {fileID: 5470907239156561636, guid: ca7974cdc2016514493a6ab094b6e256, type: 3}
       propertyPath: racerName
       value: Bob
