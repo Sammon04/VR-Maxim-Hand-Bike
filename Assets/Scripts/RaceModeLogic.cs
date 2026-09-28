@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RaceModeLogic : MonoBehaviour
@@ -15,6 +16,22 @@ public class RaceModeLogic : MonoBehaviour
     [Tooltip("Text object for the standings display.")]
     [SerializeField] private TextMeshProUGUI standingsText;
 
+    [Tooltip("Parent for UI Canvases")]
+    [SerializeField] private GameObject raceModeUI;
+
+    [Tooltip("Text object for the countdown display.")]
+    [SerializeField] private TextMeshProUGUI countdownText;
+
+    [SerializeField] private GameObject startButtonanvas;
+
+    [Header("Other")]
+    [SerializeField] private GameObject bike;
+    [SerializeField] private HandbikeController playerBikeControls;
+    [SerializeField] private float countdownTime = 3f;
+
+
+
+
     // Populated via Register()/Unregister() rather than the Inspector,
     // since interfaces (IRacer) can't be serialized by Unity.
     private readonly List<IRacer> racers = new List<IRacer>();
@@ -24,6 +41,9 @@ public class RaceModeLogic : MonoBehaviour
     private readonly List<IRacer> standings = new List<IRacer>();
 
     public IReadOnlyList<IRacer> Standings => standings;
+
+    private bool active = false;
+    private bool countingDown = false;
 
     private void Awake()
     {
@@ -48,6 +68,9 @@ public class RaceModeLogic : MonoBehaviour
 
     private void Start()
     {
+        playerBikeControls.enabled = false;
+        raceModeUI.transform.SetParent(bike.transform, true);
+
         foreach (var racer in racers)
         {
             if (racer is AIRacer aiRacer)
@@ -65,6 +88,23 @@ public class RaceModeLogic : MonoBehaviour
 
     private void Update()
     {
+        if (countingDown)
+        {
+            if (countdownTime >= 0)
+            {
+                countdownTime -= Time.deltaTime;
+                DisplayCountdown(countdownTime);
+            }
+            else
+            {
+                countingDown = false;
+                countdownText.text = "";
+                StartRace();
+            }
+        }
+
+        if (!active) return;
+
         UpdateStandings();
 
         if (standingsText != null)
@@ -130,5 +170,35 @@ public class RaceModeLogic : MonoBehaviour
             sb.AppendLine($"{i + 1}. {standings[i].RacerName}");
         }
         return sb.ToString();
+    }
+
+    public void StartRace()
+    {
+        active = true;
+
+        foreach (var racer in racers)
+        {
+            if (racer is AIRacer aiRacer)
+            {
+                aiRacer.active = true;
+            }
+            playerBikeControls.enabled = true;
+        }
+    }
+
+    public void startCountdown()
+    {
+        countingDown = true;
+        startButtonanvas.SetActive(false);
+
+    }
+
+    private void DisplayCountdown(float time)
+    {
+        if (time < 0) { time = 0; }
+
+        float seconds = Mathf.CeilToInt(time % 60);
+
+        countdownText.text = seconds.ToString();
     }
 }

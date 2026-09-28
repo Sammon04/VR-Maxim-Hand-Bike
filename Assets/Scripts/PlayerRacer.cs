@@ -17,6 +17,8 @@ public class PlayerRacer : MonoBehaviour, IRacer
     [Tooltip("Loop back to checkpoint 0 after the last one (for lap-based tracks). Set externally by RaceModeLogic based on totalLaps.")]
     public bool loopCheckpoints = true;
 
+    
+
     /*
     IRacer values.
     Updated internally by this script and read by RaceModeLogic
@@ -34,7 +36,9 @@ public class PlayerRacer : MonoBehaviour, IRacer
     public bool Finished => finished;
 
     [HideInInspector] public int totalLaps = 1; // Set externally by RaceModeLogic.
-
+    
+    private HandbikeController bikeControls => GetComponent<HandbikeController>();
+    
     private Vector3 currentTargetPoint;
 
     private void Awake()
@@ -43,11 +47,13 @@ public class PlayerRacer : MonoBehaviour, IRacer
         // RaceModeLogic to register with. Disabling the component here means
         // Start/FixedUpdate never run in that case, so nothing below has to
         // guard against a missing race manager.
+        /*
         if (ModeSettings.Mode != GameMode.NPCRace)
         {
             enabled = false;
             return;
         }
+        */
 
         if (checkpoints.Count > 0)
         {
@@ -87,6 +93,7 @@ public class PlayerRacer : MonoBehaviour, IRacer
         if (lapsCompleted >= totalLaps)
         {
             finished = true;
+            bikeControls.enabled = false;
             return;
         }
 
@@ -101,6 +108,7 @@ public class PlayerRacer : MonoBehaviour, IRacer
             {
                 currentCheckpointIndex--;
                 finished = true;
+                bikeControls.enabled = false;
             }
         }
 

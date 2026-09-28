@@ -69,6 +69,7 @@ public class AIRacer : MonoBehaviour, IRacer
     private float currentTargetSpeed;
     private Vector3 currentTargetPoint;
     private readonly float wheelRadius = 1.0f;
+    public bool active = false;
 
     private void Awake()
     {
@@ -100,7 +101,7 @@ public class AIRacer : MonoBehaviour, IRacer
 
     private void FixedUpdate()
     {
-        if (checkpoints.Count == 0 || finished) return;
+        if (checkpoints.Count == 0 || finished || !active) return;
 
         Vector3 toTarget = currentTargetPoint - rb.position;
         distanceToTarget = toTarget.magnitude;
