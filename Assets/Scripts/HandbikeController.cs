@@ -49,6 +49,8 @@ public class HandbikeController : MonoBehaviour
     [Header("VR Steering")]
     [Tooltip("Sideways offset of the hands (in meters, relative to the bike) that produces full steering input")]
     public float maxSteerHandOffset = .15f;
+    [Tooltip("Sideways offset (meters) below which no steering is applied to absorb hand wobble while cranking")]
+    public float steerDeadzone = 0.03f;
 
     [Header("VR Input Actions")]
     [Tooltip("Left grip button, e.g. <XRController>{LeftHand}/gripButton")]
@@ -163,9 +165,20 @@ public class HandbikeController : MonoBehaviour
             // ---VR STEERING: push the midpoint of your hands sideways relative to the bike ---
             Vector3 handsMidpoint = (leftHandTransform.position + rightHandTransform.position) * 0.5f;
             Vector3 localOffset = transform.InverseTransformPoint(handsMidpoint) - transform.InverseTransformPoint(crankZoneCenter.position);
-            float vrSteer = Mathf.Clamp(localOffset.x / maxSteerHandOffset, -1f, 1f);
-            if (Mathf.Abs(vrSteer) > Mathf.Abs(steerInput))
+
+            float rawOffset = localOffset.x;
+            float vrSteer = 0f;
+            if (Mathf.Abs(rawOffset) > steerDeadzone && maxSteerHandOffset > steerDeadzone)
+            {
+                float sign = Mathf.Sign(rawOffset);
+                float remapped = (Mathf.Abs(rawOffset) - steerDeadzone) / (maxSteerHandOffset - steerDeadzone);
+                vrSteer = sign * Mathf.Clamp01(remapped);
+            }
+
+            if (Mathf.Abs(vrSteer) > Mathf.Abs(steerInput)) {
                 steerInput = vrSteer;
+            }
+               
         }
         else
         {
