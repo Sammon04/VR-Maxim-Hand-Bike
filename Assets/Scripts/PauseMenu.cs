@@ -5,12 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private InputActionProperty pauseAction;
-    [SerializeField] private GameObject settingsMenu;
-    [SerializeField] private TextMeshProUGUI menuButtonText;
-    [SerializeField] private TextMeshProUGUI quitButtonText;
-    [SerializeField] private TextMeshProUGUI restartButtonText;
-    [SerializeField] private GameObject pauseMenuUI;
+    public InputActionProperty pauseAction;
+    public TextMeshProUGUI menuButtonText;
+    public TextMeshProUGUI quitButtonText;
+    public TextMeshProUGUI restartButtonText;
+    public GameObject pauseMenuUI;
 
     private bool paused = false;
     private bool menuButtonSelected = false;
@@ -31,7 +30,6 @@ public class PauseMenu : MonoBehaviour
     public void Start()
     {
         pauseMenuUI.SetActive(false);
-        settingsMenu.SetActive(false);
     }
 
     public void Pause(InputAction.CallbackContext obj)
@@ -39,12 +37,6 @@ public class PauseMenu : MonoBehaviour
         paused = !paused;
         Time.timeScale = paused ? 0f : 1f;
         pauseMenuUI.SetActive(paused);
-        settingsMenu.SetActive(false);
-    }
-
-    public void ToggleSettings()
-    {
-        settingsMenu.SetActive(!settingsMenu.activeSelf);
     }
 
     public void ReturnToMenu()
