@@ -91032,8 +91032,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 702323596}
     - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: crankVisual
+      value: 
+      objectReference: {fileID: 1113063293}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: motorTorque
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: crankZoneCenter
+      value: 
+      objectReference: {fileID: 1453214275}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: crankZoneRadius
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
@@ -91042,6 +91054,23 @@ PrefabInstance:
     - target: {fileID: 6976956179821485080, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228860784154087970, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_MotionVectors
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228860784154087970, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_RayTracingMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228860784154087970, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_fontSize
+      value: 0
+      objectReference: {fileID: 0}
       objectReference: {fileID: 0}
     - target: {fileID: 7803587992971914916, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_fontSize
@@ -91136,6 +91165,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+--- !u!4 &1113063293 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3062072810165436164, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+  m_PrefabInstance: {fileID: 1113063292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1120400419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -97890,6 +97924,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 708205150891276634, guid: 8327dbd1d9a80574eac16eb46892a29e, type: 3}
   m_PrefabInstance: {fileID: 1452992207}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1453214275 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6220722552930060553, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+  m_PrefabInstance: {fileID: 1113063292}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1455613620
 PrefabInstance:

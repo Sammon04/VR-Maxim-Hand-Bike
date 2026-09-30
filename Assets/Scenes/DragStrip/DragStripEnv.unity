@@ -8817,6 +8817,14 @@ PrefabInstance:
       propertyPath: groundContactForce
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: leftGripHeld.m_Action.m_Name
+      value: Left Grip Held
+      objectReference: {fileID: 0}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: rightGripHeld.m_Action.m_Name
+      value: Right Grip Held
+      objectReference: {fileID: 0}
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
       value: Hand Bike
