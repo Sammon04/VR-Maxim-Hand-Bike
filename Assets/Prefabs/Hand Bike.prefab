@@ -1293,7 +1293,7 @@ GameObject:
   - component: {fileID: 5231625158102619163}
   - component: {fileID: -5347009458052099086}
   m_Layer: 7
-  m_Name: Hand Bike (ai_race)
+  m_Name: Hand Bike
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
