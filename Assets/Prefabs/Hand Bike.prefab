@@ -514,6 +514,7 @@ Transform:
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 1769883152914758879}
   - {fileID: 8202785622995231436}
   - {fileID: 3250086428522799330}
   - {fileID: 4343384068969113764}
@@ -721,6 +722,37 @@ Transform:
   m_Children:
   - {fileID: 7880564834555700499}
   - {fileID: 2938201149344686260}
+  m_Father: {fileID: 6749963008199328159}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5168568973278950790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1769883152914758879}
+  m_Layer: 0
+  m_Name: crankCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1769883152914758879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5168568973278950790}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.03254472, y: -0, z: -0, w: 0.9994703}
+  m_LocalPosition: {x: -0.0773361, y: 1.0079721, z: 0.32018766}
+  m_LocalScale: {x: 1.1111112, y: 1.1111112, z: 1.1111112}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 6749963008199328159}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5280624456996891233
@@ -1401,6 +1433,7 @@ MonoBehaviour:
   crankZoneCenter: {fileID: 0}
   crankZoneRadius: 0.35
   maxSteerHandOffset: 0.15
+  steerDeadzone: 0.03
   leftGripHeld:
     m_UseReference: 0
     m_Action:
