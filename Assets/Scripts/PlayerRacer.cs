@@ -90,26 +90,19 @@ public class PlayerRacer : MonoBehaviour, IRacer
     {
         currentCheckpointIndex++;
 
-        if (lapsCompleted >= totalLaps)
-        {
-            finished = true;
-            bikeControls.enabled = false;
-            return;
-        }
-
         if (currentCheckpointIndex >= checkpoints.Count)
         {
-            if (loopCheckpoints)
+            lapsCompleted++;
+
+            if (lapsCompleted >= totalLaps)
             {
-                currentCheckpointIndex = 0;
-                lapsCompleted++;
-            }
-            else
-            {
-                currentCheckpointIndex--;
+                currentCheckpointIndex = checkpoints.Count - 1;
                 finished = true;
                 bikeControls.enabled = false;
+                return;
             }
+
+            currentCheckpointIndex = 0;
         }
 
         PickTargetPoint();

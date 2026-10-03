@@ -1812,17 +1812,41 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  checkpointReachDistance: 3
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  checkpointReachDistance: 5
   loopCheckpoints: 0
   edgePadding: 1
   accelForce: 1000
-  targetSpeed: 10
+  targetSpeed: 15
   speedVariance: 2
   maxSpeedVariance: 3
   turnSpeed: 120
-  turnSlowdownFactor: 0.6
+  turnSlowdownFactor: 0.3
+  lookAheadTurnThreshold: 0
+  lookAheadSlowdownDistance: 20
+  sharpTurnSpeedFactor: 0.1
   wheels: []
   totalLaps: 1
+  active: 0
 --- !u!1 &7614549188093251316
 GameObject:
   m_ObjectHideFlags: 0

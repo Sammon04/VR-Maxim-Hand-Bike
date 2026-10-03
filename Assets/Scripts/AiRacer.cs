@@ -43,6 +43,16 @@ public class AIRacer : MonoBehaviour, IRacer
     [Range(0f, 1f)]
     [SerializeField] private float turnSlowdownFactor = 0.6f;
 
+    [Tooltip("Minimum upcoming turn angle before the AI begins slowing down.")]
+    [SerializeField] private float lookAheadTurnThreshold = 30f;
+
+    [Tooltip("Distance before a sharp turn at which the AI begins slowing down.")]
+    [SerializeField] private float lookAheadSlowdownDistance = 20f;
+
+    [Tooltip("Lowest percentage of target speed allowed for extremely sharp upcoming turns.")]
+    [Range(0.1f, 1f)]
+    [SerializeField] private float sharpTurnSpeedFactor = 0.4f;
+
     [Header("Visuals")]
     [Tooltip("List of transforms for rotating the wheel components")]
     [SerializeField] private Transform[] wheels;
@@ -70,6 +80,7 @@ public class AIRacer : MonoBehaviour, IRacer
     private Vector3 currentTargetPoint;
     private readonly float wheelRadius = 1.0f;
     public bool active = false;
+    private float nextTurnSharpness = 0f;
 
     private void Awake()
     {
@@ -81,6 +92,7 @@ public class AIRacer : MonoBehaviour, IRacer
         if (checkpoints.Count > 0)
         {
             PickTargetPoint();
+            nextTurnSharpness = GetUpcomingTurnSharpness();
         }
     }
 
@@ -123,28 +135,23 @@ public class AIRacer : MonoBehaviour, IRacer
     {
         currentCheckpointIndex++;
 
-        if (lapsCompleted >= totalLaps)
-        {
-            finished = true;
-            return;
-        }
-
         if (currentCheckpointIndex >= checkpoints.Count)
         {
-            if (loopCheckpoints)
+            lapsCompleted++;
+
+            if (lapsCompleted >= totalLaps)
             {
-                currentCheckpointIndex = 0;
-                lapsCompleted++;
-            }
-            else
-            {
-                currentCheckpointIndex--;
+                currentCheckpointIndex = checkpoints.Count - 1;
                 finished = true;
+                return;
             }
+
+            currentCheckpointIndex = 0;
         }
 
         SetTargetSpeed();
         PickTargetPoint();
+        nextTurnSharpness = GetUpcomingTurnSharpness();
     }
 
     private void PickTargetPoint()
@@ -187,9 +194,38 @@ public class AIRacer : MonoBehaviour, IRacer
 
     private void ClampSpeed()
     {
-        if (rb.linearVelocity.magnitude > currentTargetSpeed)
+        float allowedSpeed = currentTargetSpeed;
+        //float turnSharpness = GetUpcomingTurnSharpness();
+
+        if (nextTurnSharpness > 0f)
         {
-            rb.linearVelocity = rb.linearVelocity.normalized * currentTargetSpeed;
+            // 0 when far away, 1 when at the target checkpoint.
+            float approachFactor = Mathf.InverseLerp(
+                lookAheadSlowdownDistance,
+                0f,
+                distanceToTarget
+            );
+
+            // A sharper turn results in a lower target speed.
+            float turnSpeedFactor = Mathf.Lerp(
+                1f,
+                sharpTurnSpeedFactor,
+                nextTurnSharpness
+            );
+
+            // The closer we get to the turn, the more strongly
+            // the reduced speed limit is applied.
+            allowedSpeed = Mathf.Lerp(
+                currentTargetSpeed,
+                currentTargetSpeed * turnSpeedFactor,
+                approachFactor
+            );
+        }
+
+        if (rb.linearVelocity.magnitude > allowedSpeed)
+        {
+            rb.linearVelocity =
+                rb.linearVelocity.normalized * allowedSpeed;
         }
     }
 
@@ -212,6 +248,69 @@ public class AIRacer : MonoBehaviour, IRacer
         }
     }
 
+    private float GetUpcomingTurnSharpness()
+    {
+        int nextCheckpointIndex = currentCheckpointIndex + 1;
+
+        // If this is the last checkpoint, only look toward checkpoint 0
+        // if another lap still remains.
+        if (nextCheckpointIndex >= checkpoints.Count)
+        {
+            if (lapsCompleted < totalLaps - 1)
+            {
+                nextCheckpointIndex = 0;
+            }
+            else
+            {
+                return 0f;
+            }
+        }
+
+        Vector3 incomingDirection = currentTargetPoint - rb.position;
+
+        Vector3 nextCheckpointPoint = GetCheckpointCenter(checkpoints[nextCheckpointIndex]);
+
+        Vector3 outgoingDirection =
+            nextCheckpointPoint - currentTargetPoint;
+
+        incomingDirection.y = 0f;
+        outgoingDirection.y = 0f;
+
+        if (incomingDirection.sqrMagnitude < 0.001f ||
+            outgoingDirection.sqrMagnitude < 0.001f)
+        {
+            return 0f;
+        }
+
+        float turnAngle = Vector3.Angle(
+            incomingDirection.normalized,
+            outgoingDirection.normalized
+        );
+
+        if (turnAngle <= lookAheadTurnThreshold)
+        {
+            return 0f;
+        }
+
+        return Mathf.InverseLerp(
+            lookAheadTurnThreshold,
+            180f,
+            turnAngle
+        );
+    }
+
+    private Vector3 GetCheckpointCenter(Transform checkpoint)
+    {
+        BoxCollider box = checkpoint.GetComponent<BoxCollider>();
+
+        if (box == null)
+        {
+            return checkpoint.position;
+        }
+
+        return checkpoint.TransformPoint(box.center);
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (checkpoints.Count == 0 || currentCheckpointIndex >= checkpoints.Count) return;
@@ -221,5 +320,7 @@ public class AIRacer : MonoBehaviour, IRacer
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, gizmoTarget);
         Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(gizmoTarget, lookAheadSlowdownDistance);
     }
 }
