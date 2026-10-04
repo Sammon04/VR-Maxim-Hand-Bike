@@ -106,6 +106,7 @@ public class PlayerRacer : MonoBehaviour, IRacer
         }
 
         PickTargetPoint();
+        distanceToTarget = Vector3.Distance(transform.position, currentTargetPoint);
     }
 
     private void PickTargetPoint()

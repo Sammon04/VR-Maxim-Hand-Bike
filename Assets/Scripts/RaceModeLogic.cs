@@ -109,7 +109,12 @@ public class RaceModeLogic : MonoBehaviour
 
         if (standingsText != null)
         {
-            standingsText.text = GetStandingsText();
+            string newStandingsText = GetStandingsText();
+
+            if (standingsText.text != newStandingsText)
+            {
+                standingsText.text = newStandingsText;
+            }
         }
     }
 
@@ -165,9 +170,25 @@ public class RaceModeLogic : MonoBehaviour
     public string GetStandingsText()
     {
         var sb = new StringBuilder();
+
         for (int i = 0; i < standings.Count; i++)
         {
-            sb.AppendLine($"{i + 1}. {standings[i].RacerName}");
+            string racerText = $"{standings[i].RacerName}";
+
+            if (i == 0)
+            {
+                racerText = $"<color=#FFD700>{racerText}</color>"; // Gold
+            }
+            else if (i == 1)
+            {
+                racerText = $"<color=#C0C0C0>{racerText}</color>"; // Silver
+            }
+            else if (i == 2)
+            {
+                racerText = $"<color=#CD7F32>{racerText}</color>"; // Bronze
+            }
+
+            sb.AppendLine(racerText);
         }
         return sb.ToString();
     }

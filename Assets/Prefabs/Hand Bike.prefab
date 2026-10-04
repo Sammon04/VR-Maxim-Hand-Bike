@@ -1412,8 +1412,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandbikeController
   motorTorque: 30
-  maxVelocity: 10
-  maxSteerAngle: 90
+  maxVelocity: 20
+  maxSteerAngle: 180
   acceleration: 15
   deceleration: 8
   brakeTorque: 50
@@ -1426,16 +1426,16 @@ MonoBehaviour:
   WheelRadius: 0.3
   maxSteerVisualAngle: 0.5
   steerVisualSpeed: 200
-  crankVisual: {fileID: 0}
-  crankVisualAxis: {x: 1, y: 0, z: 0}
+  crankVisual: {fileID: 3062072810165436164}
+  crankVisualAxis: {x: 0, y: 0, z: -1}
   leftHandTransform: {fileID: 371474412150022198}
   rightHandTransform: {fileID: 3685168680331667369}
   maxCrankDegreesPerSec: 45
   reverseCrankDirection: 1
-  crankZoneCenter: {fileID: 0}
-  crankZoneRadius: 0.35
-  maxSteerHandOffset: 0.15
-  steerDeadzone: 0.03
+  crankZoneCenter: {fileID: 1769883152914758879}
+  crankZoneRadius: 0.7
+  maxSteerHandOffset: 0.5
+  steerDeadzone: 0.1
   leftGripHeld:
     m_UseReference: 0
     m_Action:
@@ -1447,8 +1447,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 4dca34d5-f62e-4bda-b321-a4ecbea4baeb
-        m_Path: <XRInputV1::Oculus::OculusTouchControllerOpenXR>{LeftHand}/grippressed
+        m_Id: b282aae2-6df4-412e-8416-94485e80db6a
+        m_Path: <OculusTouchController>{LeftHand}/gripPressed
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1467,8 +1467,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 8f849494-1a8a-4226-bf30-e47ffbe45a13
-        m_Path: <XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/grippressed
+        m_Id: 6d8e790a-da6e-4543-9d5d-7633b9bc2a48
+        m_Path: <OculusTouchController>{RightHand}/gripPressed
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1496,7 +1496,7 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: -2439264783773714294, guid: b6d5c44ebe3244b7692e81ae8265eb22, type: 3}
-  groundContactForce: 15
+  groundContactForce: 75
 --- !u!114 &926503284854503278
 MonoBehaviour:
   m_ObjectHideFlags: 0

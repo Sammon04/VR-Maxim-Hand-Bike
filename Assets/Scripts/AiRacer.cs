@@ -151,6 +151,7 @@ public class AIRacer : MonoBehaviour, IRacer
 
         SetTargetSpeed();
         PickTargetPoint();
+        distanceToTarget = Vector3.Distance(rb.position, currentTargetPoint);
         nextTurnSharpness = GetUpcomingTurnSharpness();
     }
 
