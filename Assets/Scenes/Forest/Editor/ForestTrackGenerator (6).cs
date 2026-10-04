@@ -1,4 +1,4 @@
-// Forest Track Generator v3 (editor-only)
+// Forest Track Generator v5 (editor-only)
 // Put this file in Assets/Editor/, then open Tools > Forest Track Generator and click Generate Scene.
 //
 // Builds a 1.3 km x 1.3 km dense forest scene:
@@ -23,7 +23,9 @@ public class ForestTrackGenerator : EditorWindow
     [SerializeField] GameObject[] treePrefabs = new GameObject[0];
     [SerializeField] GameObject[] rockPrefabs = new GameObject[0];
     [SerializeField] GameObject waterPrefab;
-    [SerializeField] string scenePath = "Assets/Scenes/FOREST TEST/ForestTrack.unity";
+    [SerializeField] string scenePath = "Assets/Scenes/Forest/Forest.unity";
+    [SerializeField] float wallHeight = 3f;
+    [SerializeField] float wallGap = 0.5f;
 
     const string GenFolder = "Assets/Scenes/Forest/Generated";
     const float S = 0.65f;          // layout scale: trail coordinates below are multiplied by this
@@ -58,6 +60,7 @@ public class ForestTrackGenerator : EditorWindow
         public string name;
         public Vector2[] ctrl;
         public float halfWidth, falloff, maxUp, maxDown, roughness, treeClear;
+        public bool climbOnly; // never goes downhill between the fork and the finish
         public int smoothRadius, layer;
         public Vector3[] pts;
     }
@@ -113,26 +116,43 @@ public class ForestTrackGenerator : EditorWindow
         EditorGUILayout.HelpBox("Leave the prefab lists empty to use built-in low-poly trees and rocks. " +
                                 "Flowers, bushes, logs, fences, docks and benches are always generated.", MessageType.Info);
         if (GUILayout.Button("Generate Scene", GUILayout.Height(32))) Generate();
+
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("Track Walls", EditorStyles.boldLabel);
+        so.Update();
+        EditorGUILayout.PropertyField(so.FindProperty("wallHeight"));
+        EditorGUILayout.PropertyField(so.FindProperty("wallGap"), new GUIContent("Gap From Trail Edge"));
+        so.ApplyModifiedProperties();
+        EditorGUILayout.HelpBox("Adds invisible box colliders along both edges of every trail in the open scene. " +
+                                "Use the same seed the scene was generated with. Running it again replaces the old walls.", MessageType.None);
+        if (GUILayout.Button("Add Track Walls to Open Scene", GUILayout.Height(28))) AddTrackWalls();
+
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("Update Existing Scene", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Reshapes the trails in the open scene using the current settings, repaints the ground, " +
+                                "puts trees, rocks, logs, signs and fences back on the ground, and rebuilds the track walls. " +
+                                "Your own objects (like the bike) are not touched.", MessageType.None);
+        if (GUILayout.Button("Update Open Scene", GUILayout.Height(28))) UpdateOpenScene();
     }
 
     // ================================================================== main
 
     void Generate()
     {
+        if (!EditorUtility.DisplayDialog("Generate Scene",
+                $"This builds a brand-new scene at {scenePath} and overwrites the files in {GenFolder}.\n\n" +
+                "Any scene already using those files (like your current track) will break.\n\n" +
+                "To change a scene you already have, cancel and use 'Update Open Scene' instead.",
+                "Generate anyway", "Cancel")) return;
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
         try
         {
             rng = new System.Random(seed);
             ox = rng.Next(0, 5000);
             oz = rng.Next(0, 5000);
-            lakes = new[]
-            {
-                new Lake(560, 560, 60),   // easy trail lake 1
-                new Lake(258, 1062, 55),  // easy trail lake 2
-                new Lake(975, 1045, 45),  // valley between the hard trail's mountains
-                new Lake(1600, 760, 65),  // beside the sprint trail
-                new Lake(840, 440, 40)    // near the fork
-            };
+            lakes = MakeLakes();
+            // start from an empty folder: replacing meshes/materials in place leaves the tree prefabs pointing at deleted copies
+            if (AssetDatabase.IsValidFolder(GenFolder)) AssetDatabase.DeleteAsset(GenFolder);
             EnsureFolder(GenFolder);
             EnsureFolder(Path.GetDirectoryName(scenePath).Replace('\\', '/'));
 
@@ -183,6 +203,230 @@ public class ForestTrackGenerator : EditorWindow
         {
             EditorUtility.ClearProgressBar();
         }
+    }
+
+    static Lake[] MakeLakes() => new[]
+    {
+        new Lake(560, 560, 60),   // easy trail lake 1
+        new Lake(258, 1062, 55),  // easy trail lake 2
+        new Lake(975, 1045, 45),  // valley between the hard trail's mountains
+        new Lake(1600, 760, 65),  // beside the sprint trail
+        new Lake(840, 440, 40)    // near the fork
+    };
+
+    // ================================================================== update existing scene
+
+    // puts every generated object directly on the current ground (no matter how far off it was)
+    void SnapObjectsToGround()
+    {
+        void SetY(Transform c, float y) { var p = c.position; p.y = y; c.position = p; }
+        void Each(string group, System.Action<Transform> fn)
+        {
+            var g = GameObject.Find(group);
+            if (!g) return;
+            var kids = new List<Transform>();
+            foreach (Transform c in g.transform) kids.Add(c);
+            if (kids.Count == 0) return;
+            Undo.RecordObjects(kids.ToArray(), "Snap To Ground");
+            foreach (var c in kids) fn(c);
+        }
+
+        Each("Rocks", c => SetY(c, GroundY(c.position) - 0.25f * c.localScale.y));            // slightly sunk in, like when generated
+        Each("Fallen Logs", c => SetY(c, GroundY(c.position) + c.localScale.x * 0.5f - 0.1f)); // resting on the ground
+        Each("Track Markers", c => SetY(c, GroundY(c.position)));                             // signs, arches, benches, spawn
+        Each("Forest (prefab trees)", c => SetY(c, GroundY(c.position)));
+        Each("Lookouts", c => { if (c.name == "Bench") SetY(c, GroundY(c.position)); });     // docks stay at the water
+        RebuildFences();
+    }
+
+    // fences are made of posts and rails between them, so rebuild them on the current ground
+    void RebuildFences()
+    {
+        var old = GameObject.Find("Fences");
+        var wood = AssetDatabase.LoadAssetAtPath<Material>(GenFolder + "/DockWood.mat");
+        if (old)
+        {
+            if (!wood)
+            {
+                var r = old.GetComponentInChildren<MeshRenderer>();
+                if (r) wood = r.sharedMaterial;
+            }
+            Undo.DestroyObjectImmediate(old);
+        }
+        if (!wood) return;
+
+        var fences = new GameObject("Fences").transform;
+        Undo.RegisterCreatedObjectUndo(fences.gameObject, "Rebuild Fences");
+        var easy = allPaths[EasyId];
+        foreach (var lo in lookouts) BuildFence(easy, lo.index - 35, lo.index + 35, lo.index, lo.dir, fences, wood);
+    }
+
+    void UpdateOpenScene()
+    {
+        var t = Object.FindFirstObjectByType<Terrain>();
+        if (t == null)
+        {
+            EditorUtility.DisplayDialog("Update Open Scene", "Open the generated forest scene first.", "OK");
+            return;
+        }
+        bool hadWalls = GameObject.Find("Track Walls") != null;
+        try
+        {
+            Progress("Rebuilding trail layout", 0.1f);
+            rng = new System.Random(seed);
+            ox = rng.Next(0, 5000);
+            oz = rng.Next(0, 5000);
+            lakes = MakeLakes();
+            BuildBaseHeights();
+            BuildPaths();
+            BuildLookouts();
+            var heights = CarveHeights();
+            terrain = t;
+            td = t.terrainData;
+
+            Undo.RegisterCompleteObjectUndo(td, "Update Open Scene");
+
+            Progress("Reshaping terrain", 0.4f);
+            td.SetHeights(0, 0, heights);
+
+            Progress("Repainting ground", 0.6f);
+            if (td.terrainLayers != null && td.terrainLayers.Length == 4) PaintAlphamaps();
+
+            Progress("Putting objects back on the ground", 0.8f);
+            // terrain trees, flowers and bushes store their own height, so snap them to the new ground
+            var trees = td.treeInstances;
+            for (int i = 0; i < trees.Length; i++)
+            {
+                var ti = trees[i];
+                ti.position.y = td.GetInterpolatedHeight(ti.position.x, ti.position.z) / td.size.y;
+                trees[i] = ti;
+            }
+            td.SetTreeInstances(trees, false);
+
+            SnapObjectsToGround();
+
+            t.Flush();
+            EditorUtility.SetDirty(td);
+            AssetDatabase.SaveAssets();
+            EditorSceneManager.MarkSceneDirty(t.gameObject.scene);
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+        if (hadWalls) AddTrackWalls();
+        Debug.Log("Open scene updated.");
+    }
+
+    // ================================================================== track walls
+
+    void AddTrackWalls()
+    {
+        var t = Object.FindFirstObjectByType<Terrain>();
+        if (t == null)
+        {
+            EditorUtility.DisplayDialog("Track Walls", "Open the generated forest scene first.", "OK");
+            return;
+        }
+        try
+        {
+            // rebuild the same trail layout the scene was generated with (deterministic from the seed)
+            Progress("Rebuilding trail layout", 0.2f);
+            rng = new System.Random(seed);
+            ox = rng.Next(0, 5000);
+            oz = rng.Next(0, 5000);
+            lakes = MakeLakes();
+            BuildBaseHeights();
+            BuildPaths();
+            BuildLookouts();
+            terrain = t;
+
+            // open areas the walls must not cross: start clearing, fork plaza, finish plaza, lake lookouts
+            var clearings = new List<Vector3>(); // x, z = centre, y = radius
+            clearings.Add(new Vector3(startPath.pts[0].x, 8f, startPath.pts[0].z));
+            var forkPt = startPath.pts[startPath.pts.Length - 1];
+            clearings.Add(new Vector3(forkPt.x, 14f, forkPt.z));
+            clearings.Add(new Vector3(FinishCenter.x, FinishRadius, FinishCenter.y));
+            foreach (var lo in lookouts) clearings.Add(new Vector3(lo.center.x, 6f, lo.center.z));
+
+            var old = GameObject.Find("Track Walls");
+            if (old) Undo.DestroyObjectImmediate(old);
+            var parent = new GameObject("Track Walls");
+            Undo.RegisterCreatedObjectUndo(parent, "Add Track Walls");
+            parent.isStatic = true;
+
+            Progress("Placing walls", 0.6f);
+            int count = 0;
+            const int seg = 4; // metres of trail per collider
+            for (int pi = 0; pi < allPaths.Length; pi++)
+            {
+                var p = allPaths[pi];
+                var group = new GameObject(p.name + " Walls").transform;
+                group.SetParent(parent.transform);
+                group.gameObject.isStatic = true;
+                float off = p.halfWidth + wallGap;
+
+                for (int i = 0; i < p.pts.Length - 1; i += seg)
+                {
+                    int j = Mathf.Min(i + seg, p.pts.Length - 1);
+                    Vector3 ra = Vector3.Cross(Vector3.up, Tangent(p, i));
+                    Vector3 rb = Vector3.Cross(Vector3.up, Tangent(p, j));
+                    for (int side = -1; side <= 1; side += 2)
+                    {
+                        Vector3 a = p.pts[i] + ra * side * off, b = p.pts[j] + rb * side * off;
+                        Vector3 mid = (a + b) * 0.5f;
+
+                        // leave openings only where a wall would cross another trail, the fork, the finish plaza or a lookout
+                        if (WallBlocked(a, pi, i, clearings) || WallBlocked(b, pi, j, clearings) ||
+                            WallBlocked(mid, pi, (i + j) / 2, clearings)) continue;
+
+                        a.y = GroundY(a);
+                        b.y = GroundY(b);
+                        Vector3 d = b - a;
+                        if (d.sqrMagnitude < 0.01f) continue;
+
+                        var w = new GameObject("Wall");
+                        w.transform.SetParent(group, false);
+                        w.transform.SetPositionAndRotation((a + b) * 0.5f + Vector3.up * wallHeight * 0.5f, Quaternion.LookRotation(d));
+                        var bc = w.AddComponent<BoxCollider>();
+                        bc.size = new Vector3(0.3f, wallHeight, d.magnitude + 0.4f); // slight overlap so there are no gaps between segments
+                        w.isStatic = true;
+                        count++;
+                    }
+                }
+            }
+            EditorSceneManager.MarkSceneDirty(t.gameObject.scene);
+            Debug.Log($"Added {count} track wall colliders.");
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+    }
+
+    float GroundY(Vector3 p) => terrain.SampleHeight(p) + terrain.transform.position.y;
+
+    // exact check: is this wall point on a clearing, another trail, or a far-away section of its own trail (switchbacks)?
+    bool WallBlocked(Vector3 q, int pathIdx, int idx, List<Vector3> clearings)
+    {
+        foreach (var c in clearings)
+        {
+            float dx = q.x - c.x, dz = q.z - c.z;
+            float r = c.y + 0.3f;
+            if (dx * dx + dz * dz < r * r) return true;
+        }
+        for (int pi = 0; pi < allPaths.Length; pi++)
+        {
+            var p = allPaths[pi];
+            float lim = p.halfWidth + 0.3f, lim2 = lim * lim;
+            for (int k = 0; k < p.pts.Length; k++)
+            {
+                if (pi == pathIdx && Mathf.Abs(k - idx) < 40) continue; // its own trail right here doesn't count
+                float dx = q.x - p.pts[k].x, dz = q.z - p.pts[k].z;
+                if (dx * dx + dz * dz < lim2) return true;
+            }
+        }
+        return false;
     }
 
     static void Progress(string msg, float p) => EditorUtility.DisplayProgressBar("Forest Track", msg, p);
@@ -270,8 +514,8 @@ public class ForestTrackGenerator : EditorWindow
             ctrl = V(1000, 250, 1035, 330, 975, 395, 1045, 460, 965, 530, 1040, 600, 975, 670, 1030, 740,
                      990, 820, 1060, 900, 1110, 990, 1090, 1090, 1030, 1170, 960, 1240, 1040, 1300, 965, 1365,
                      1035, 1430, 975, 1500, 1020, 1580, 990, 1680, 1000, 1780),
-            halfWidth = 4.25f, falloff = 7f, maxUp = 0.25f, maxDown = 0.3f, smoothRadius = 4, layer = 2,
-            roughness = 0.45f, treeClear = 5.5f
+            halfWidth = 4.25f, falloff = 10f, maxUp = 0.15f, maxDown = 0.15f, smoothRadius = 15, layer = 2, climbOnly = true,
+            roughness = 0f, treeClear = 5.5f
         };
         var sprint = new TrackPath
         {
@@ -281,17 +525,33 @@ public class ForestTrackGenerator : EditorWindow
             halfWidth = 5f, falloff = 12f, maxUp = 0.035f, maxDown = 0.035f, smoothRadius = 25, layer = 3, treeClear = 6f
         };
 
+        // the start road and fork plaza are completely flat
         ComputePathHeights(startPath, null, null);
-        forkH = startPath.pts[startPath.pts.Length - 1].y;
+        float avg = 0f;
+        foreach (var pt in startPath.pts) avg += pt.y;
+        forkH = avg / startPath.pts.Length;
+        for (int i = 0; i < startPath.pts.Length; i++) startPath.pts[i].y = forkH;
 
+        // the finish sits above the fork (so the hard trail only ever climbs), but no higher
+        // than every trail can reach comfortably within its grade limit
         float s = 0f; int c = 0;
         for (int dz = -15; dz <= 15; dz += 5)
         for (int dx = -15; dx <= 15; dx += 5) { s += SampleGrid(baseH, FinishCenter.x + dx, FinishCenter.y + dz); c++; }
-        finishH = s / c;
+        float cap = float.MaxValue;
+        foreach (var b in new[] { easy, hard, sprint }) cap = Mathf.Min(cap, 0.6f * b.maxUp * SplineLength(b.ctrl));
+        finishH = Mathf.Clamp(s / c, forkH + Mathf.Min(10f, cap), forkH + cap);
 
         branches = new[] { easy, hard, sprint };
         foreach (var b in branches) ComputePathHeights(b, forkH, finishH);
         allPaths = new[] { startPath, easy, hard, sprint };
+    }
+
+    static float SplineLength(Vector2[] ctrl)
+    {
+        var pts = SampleSpline(ctrl, 1f);
+        float len = 0f;
+        for (int i = 1; i < pts.Count; i++) len += Vector2.Distance(pts[i], pts[i - 1]);
+        return len;
     }
 
     static Vector2[] V(params float[] a)
@@ -322,6 +582,21 @@ public class ForestTrackGenerator : EditorWindow
 
         // limit climbs to maxUp and descents to maxDown (in the direction of travel)
         int iters = pinEnd.HasValue ? 4 : 1;
+        if (p.climbOnly && pinStart.HasValue && pinEnd.HasValue)
+        {
+            // never goes down: follows the hills up, stays level over dips, cuts through tops above the finish height
+            float top = pinEnd.Value;
+            for (int it = 0; it < 4; it++)
+            {
+                h[0] = pinStart.Value;
+                for (int i = 1; i < n; i++)
+                    h[i] = Mathf.Clamp(h[i], h[i - 1], Mathf.Min(h[i - 1] + p.maxUp * ds[i], top));
+                h[n - 1] = top;
+                for (int i = n - 2; i >= 0; i--)
+                    h[i] = Mathf.Clamp(h[i], h[i + 1] - p.maxUp * ds[i + 1], h[i + 1]);
+            }
+            iters = 0;
+        }
         for (int it = 0; it < iters; it++)
         {
             if (pinStart.HasValue) h[0] = pinStart.Value;
@@ -335,6 +610,22 @@ public class ForestTrackGenerator : EditorWindow
             }
         }
         if (pinStart.HasValue) h[0] = pinStart.Value;
+
+        // round off the sharp corners the grade limits leave at crests and dips.
+        // both ends stay fixed, and averaging never makes a slope steeper.
+        int ps = Mathf.Max(8, p.smoothRadius);
+        var tmp = new float[n];
+        for (int pass = 0; pass < 5; pass++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                int r = Mathf.Min(ps, Mathf.Min(i, n - 1 - i));
+                float sum = 0f;
+                for (int k = i - r; k <= i + r; k++) sum += h[k];
+                tmp[i] = sum / (2 * r + 1);
+            }
+            System.Array.Copy(tmp, h, n);
+        }
 
         p.pts = new Vector3[n];
         for (int i = 0; i < n; i++)
@@ -417,8 +708,9 @@ public class ForestTrackGenerator : EditorWindow
         for (int id = 0; id < allPaths.Length; id++)
         {
             float reach = allPaths[id].falloff * (id == HardId ? HardFillSpread : 1f);
-            foreach (var pt in allPaths[id].pts)
-                Stamp(pt.x, pt.z, pt.y, allPaths[id].halfWidth, allPaths[id].falloff, reach, id);
+            var pts = allPaths[id].pts;
+            for (int i = 0; i < pts.Length - 1; i++)
+                StampSegment(pts[i], pts[i + 1], allPaths[id].halfWidth, allPaths[id].falloff, reach, id);
         }
 
         var s0 = startPath.pts[0];
@@ -437,15 +729,39 @@ public class ForestTrackGenerator : EditorWindow
             if (e <= 0f) h = targetBuf[z, x];
             else if (idBuf[z, x] >= 0)
             {
-                // where the hard trail sits above the ground, spread the slope out wide
-                // so it reads as a natural hillside instead of a thin raised ridge
+                // spread the hard trail's banks out wide (above or below the ground)
+                // so it reads as a natural hillside, not a raised ridge or a trench
                 float f = falloffBuf[z, x];
-                if (idBuf[z, x] == HardId && targetBuf[z, x] > h) f *= HardFillSpread;
+                if (idBuf[z, x] == HardId) f *= HardFillSpread;
                 if (e < f) h = Mathf.Lerp(targetBuf[z, x], h, Mathf.SmoothStep(0f, 1f, e / f));
             }
             result[z, x] = Mathf.Clamp01(h / SizeY);
         }
         return result;
+    }
+
+    // every ground cell takes the trail height at its exact closest point on the centre line,
+    // so the riding surface is one smooth slope instead of small steps between sample points
+    void StampSegment(Vector3 a, Vector3 b, float halfW, float falloff, float reach, int id)
+    {
+        float r = halfW + reach;
+        int x0 = Mathf.Max(0, Mathf.FloorToInt((Mathf.Min(a.x, b.x) - r) / Cell)), x1 = Mathf.Min(Res - 1, Mathf.CeilToInt((Mathf.Max(a.x, b.x) + r) / Cell));
+        int z0 = Mathf.Max(0, Mathf.FloorToInt((Mathf.Min(a.z, b.z) - r) / Cell)), z1 = Mathf.Min(Res - 1, Mathf.CeilToInt((Mathf.Max(a.z, b.z) + r) / Cell));
+        float abx = b.x - a.x, abz = b.z - a.z;
+        float len2 = Mathf.Max(1e-6f, abx * abx + abz * abz);
+        for (int iz = z0; iz <= z1; iz++)
+        for (int ix = x0; ix <= x1; ix++)
+        {
+            float px = ix * Cell - a.x, pz = iz * Cell - a.z;
+            float t = Mathf.Clamp01((px * abx + pz * abz) / len2);
+            float dx = px - abx * t, dz = pz - abz * t;
+            float e = Mathf.Sqrt(dx * dx + dz * dz) - halfW;
+            if (e > reach || e >= edgeBuf[iz, ix]) continue;
+            edgeBuf[iz, ix] = e;
+            targetBuf[iz, ix] = Mathf.Lerp(a.y, b.y, t);
+            falloffBuf[iz, ix] = falloff;
+            idBuf[iz, ix] = id;
+        }
     }
 
     void Stamp(float x, float z, float h, float halfW, float falloff, float reach, int id)
@@ -483,7 +799,11 @@ public class ForestTrackGenerator : EditorWindow
         var rock   = MakeLayer("Rock",   MakeGroundTexture("RockTex",   new Color(0.40f, 0.39f, 0.37f), new Color(0.56f, 0.55f, 0.51f), 3), 8f);
         var gravel = MakeLayer("Gravel", MakeGroundTexture("GravelTex", new Color(0.63f, 0.58f, 0.49f), new Color(0.74f, 0.70f, 0.62f), 4), 4f);
         td.terrainLayers = new[] { grass, dirt, rock, gravel };
+        PaintAlphamaps();
+    }
 
+    void PaintAlphamaps()
+    {
         int ar = td.alphamapResolution;
         var maps = new float[ar, ar, 4];
         for (int az = 0; az < ar; az++)
@@ -519,7 +839,8 @@ public class ForestTrackGenerator : EditorWindow
         terrain.heightmapPixelError = 8f;
         terrain.basemapDistance = 200f;
         terrain.treeDistance = 280f;
-        terrain.treeBillboardDistance = 100f;
+        terrain.treeBillboardDistance = 280f;
+        terrain.treeMaximumFullLODCount = 10000;
         terrain.drawInstanced = true;
         var sh = Shader.Find("Universal Render Pipeline/Terrain/Lit");
         if (sh != null)
