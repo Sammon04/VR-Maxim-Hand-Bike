@@ -195,8 +195,12 @@ public class ForestTrackGenerator : EditorWindow
 
             SetupLighting(startPath.pts[3], Quaternion.LookRotation(Tangent(startPath, 3)));
 
-            EditorSceneManager.SaveScene(scene, scenePath);
+            // the terrain was changed after its file was first created (painting, trees), so it must be
+            // marked dirty or those changes only live in memory and are gone when the scene is reopened
+            EditorUtility.SetDirty(td);
             AssetDatabase.SaveAssets();
+            EditorSceneManager.SaveScene(scene, scenePath);
+            AssetDatabase.Refresh();
             Debug.Log("Forest track generated: " + scenePath);
         }
         finally
