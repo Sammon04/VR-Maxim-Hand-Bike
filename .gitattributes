@@ -60,3 +60,4 @@
 *.renderTexture text eol=lf
 *.spriteatlas text eol=lf
 *.preset text eol=lf
+Assets/Scenes/Forest/Generated/** binary
