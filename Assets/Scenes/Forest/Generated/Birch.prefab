@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6332326769667023357
+--- !u!1 &7869794717383031713
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8523861535155560916}
-  - component: {fileID: 8479575626222922395}
-  - component: {fileID: 6327248998809002716}
-  - component: {fileID: 7658381031923740697}
+  - component: {fileID: 7805864191664668935}
+  - component: {fileID: 5907204102116405816}
+  - component: {fileID: 502624510990865141}
+  - component: {fileID: 7794254526174072765}
   m_Layer: 0
   m_Name: Birch
   m_TagString: Untagged
