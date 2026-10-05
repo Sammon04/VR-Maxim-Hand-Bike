@@ -1394,28 +1394,38 @@ MonoBehaviour:
   WheelRadius: 0.3
   maxSteerVisualAngle: 0.5
   steerVisualSpeed: 200
+  crankVisual: {fileID: 0}
+  crankVisualAxis: {x: 1, y: 0, z: 0}
   leftHandTransform: {fileID: 371474412150022198}
   rightHandTransform: {fileID: 3685168680331667369}
   maxCrankDegreesPerSec: 45
   reverseCrankDirection: 1
-  crankGripHeld:
+  crankZoneCenter: {fileID: 0}
+  crankZoneRadius: 0.35
+  maxSteerHandOffset: 0.15
+  steerDeadzone: 0.03
+  leftGripHeld:
     m_UseReference: 0
     m_Action:
-      m_Name: Crank Grip Held
+      m_Name: Left Grip Held
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: de068c41-db6f-4e9e-a04b-2f00ceeddad4
+      m_Id: b77eb3c2-baf3-4fad-bef2-7c5903dbf8d4
       m_Processors: 
       m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 8261d20d-4342-41ec-8615-256d55bd15a2
-        m_Path: <OculusTouchController>/gripPressed
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Crank Grip Held
-        m_Flags: 0
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  rightGripHeld:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Right Grip Held
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 2059b6c6-f057-4013-b27f-afc7f985cb9d
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
   brakeHeld:
@@ -1438,26 +1448,6 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: -2439264783773714294, guid: b6d5c44ebe3244b7692e81ae8265eb22, type: 3}
-  vrSteerAxis:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Vr Steer Axis
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: d1418e1c-bc9e-4824-b1e1-47ee45c2578b
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: cd2e2dcf-b0b8-416c-90d6-f3a4c7619850
-        m_Path: <OculusTouchController>/thumbstick
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Vr Steer Axis
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: -8666952849799569744, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   groundContactForce: 15
 --- !u!114 &-5347009458052099086
 MonoBehaviour:
