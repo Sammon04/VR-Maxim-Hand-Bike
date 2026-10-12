@@ -12,17 +12,20 @@ public class GameSettings : ScriptableObject
 
     public event Action OnSettingsChanged;
 
+    private void OnEnable()
+    {
+        Load();
+    }
+
     public void SetVignetteStrength(float value)
     {
         vignetteStrength = Mathf.Clamp01(value);
-        OnSettingsChanged?.Invoke();
         Save();
     }
 
     public void SetGameVolume(float value)
     {
         masterVolume = Mathf.Clamp01(value);
-        OnSettingsChanged?.Invoke();
         Save();
     }
 
@@ -37,5 +40,7 @@ public class GameSettings : ScriptableObject
     {
         vignetteStrength = PlayerPrefs.GetFloat("VignetteStrength", 0.5f);
         masterVolume = PlayerPrefs.GetFloat("GameVolume", 0.5f);
+
+        OnSettingsChanged?.Invoke();
     }
 }

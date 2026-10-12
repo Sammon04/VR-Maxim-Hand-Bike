@@ -1504,7 +1504,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6193281168116514685}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db043ace20c9794419248775967d19aa, type: 3}
   m_Name: 
@@ -1537,7 +1537,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  checkpointReachDistance: 3
+  checkpointReachDistance: 8
   loopCheckpoints: 1
   totalLaps: 1
 --- !u!1 &6210464026646362986

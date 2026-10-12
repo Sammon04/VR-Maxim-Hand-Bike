@@ -63,7 +63,7 @@ public class TimeTrialLogic : MonoBehaviour
     private float timeElapsed = 0.0f;
     private bool raceActive = false;
     private bool countingDown = false;
-    private HandbikeController bikeControls;
+    private HandbikeController bikeController;
 
     [System.Serializable]
     private class LeaderboardEntry
@@ -83,16 +83,16 @@ public class TimeTrialLogic : MonoBehaviour
         get
         {
             string fileName = $"Leaderboard_{SceneManager.GetActiveScene().name}.json";
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             string scriptsFolder = Path.Combine(Application.dataPath, "Scripts");
             if (!Directory.Exists(scriptsFolder))
             {
                 Directory.CreateDirectory(scriptsFolder);
             }
             return Path.Combine(scriptsFolder, fileName);
-#else       
+            #else       
             return Path.Combine(Application.persistentDataPath, fileName);
-#endif
+            #endif
         }
     }
 
@@ -108,6 +108,11 @@ public class TimeTrialLogic : MonoBehaviour
         StartCountdown();
         DisplayCountdown(countdownTime);
         timeTrialUI.transform.SetParent(bike.transform, true);
+
+        if (bike)
+        {
+            bikeController = bike.GetComponent<HandbikeController>();
+        }
 
         buttonCanvas.SetActive(false);
         nameEntryCanvas.SetActive(false);
@@ -137,17 +142,13 @@ public class TimeTrialLogic : MonoBehaviour
 
     private void StartCountdown()
     {
-        if (bike)
-        {
-            bikeControls = bike.GetComponent<HandbikeController>();
-            bikeControls.enabled = false;
-        }          
+        if (bikeController) bikeController.setControl(false);
         countingDown = true;
     }
 
     private void EndCountDown()
     {
-        if (bikeControls) bikeControls.enabled = true;
+        if (bikeController) bikeController.setControl(true);
     }
 
     private void DisplayCountdown(float time)
@@ -184,7 +185,7 @@ public class TimeTrialLogic : MonoBehaviour
     private void EndTimeTrial()
     {
         raceActive = false;
-        if (bikeControls) bikeControls.enabled = false;
+        if (bikeController) bikeController.setControl(false);
         timerDisplay.text = "";
         finishDisplay.text = $"Time Trial Complete!\n\nFinal Time: {timeElapsed.ToString("F3")}";
 

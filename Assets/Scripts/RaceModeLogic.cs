@@ -44,6 +44,7 @@ public class RaceModeLogic : MonoBehaviour
 
     private bool active = false;
     private bool countingDown = false;
+    private PlayerRacer playerRacer;
 
     private void Awake()
     {
@@ -68,6 +69,9 @@ public class RaceModeLogic : MonoBehaviour
 
     private void Start()
     {
+        playerRacer = bike.GetComponent<PlayerRacer>();
+        playerRacer.enabled = true;
+
         playerBikeControls.enabled = false;
         raceModeUI.transform.SetParent(bike.transform, true);
 
