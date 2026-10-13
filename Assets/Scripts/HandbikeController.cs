@@ -63,6 +63,33 @@ public class HandbikeController : MonoBehaviour
 
     [Header("Ground Contact")]
     public float groundContactForce = 15f;
+
+
+    [Header("Audio")]
+    [Tooltip("Looping rolling/wheel sound. Set Loop = true on the source.")]
+    public AudioSource rollingAudio;
+
+    [Tooltip("Looping brake squeal. Set Loop = ture on the source.")]
+    public AudioSource brakeAudio;
+
+    [Tooltip("Looping Chain/Cranking sounds while cranking")]
+    public AudioSource crankAudio;
+
+
+    public float rollingMaxVolume = .8f;
+    public float rollingMinPitch = .7f;
+    public float rollingMaxPitch = 1.4f;
+    public float brakeMaxVolume = 1f;
+    [Tooltip("Brake sound only plays above this speed")]
+    public float brakeMinSpeed = 1f;
+    public float audioFadeSpeed = 6f;
+
+    [Header("Game Settings")]
+    [Tooltip("Drag GameSettings Asset here")]
+    public GameSettings gameSettings;
+
+    float MasterVolume => gameSettings != null ? gameSettings.masterVolume : 1f;
+    float brakeVolumeCurrent;
     
 
     Rigidbody rb;
@@ -97,6 +124,15 @@ public class HandbikeController : MonoBehaviour
 
         if (crankVisual != null)
             crankVisualRestRotation = crankVisual.localRotation;
+
+        foreach (var src in new[] {rollingAudio, brakeAudio, crankAudio})
+        {
+            if (src == null ) continue;
+            src.loop = true;
+            src.volume = 0f;
+            src.spatialBlend = 1f; // makes it 3D
+            if (!src.isPlaying) src.Play();
+        }
     }
 
     void FixedUpdate()
@@ -207,6 +243,7 @@ public class HandbikeController : MonoBehaviour
         rb.AddForce(Vector3.down * groundContactForce, ForceMode.Acceleration);
         UpdateSteeringVisual(steerInput);
         UpdateWheelSpin(currentSpeed);
+        UpdateAudio(currentSpeed, braking, accelInput);
     }
 
     void UpdateSteeringVisual(float turnInput)
@@ -230,6 +267,33 @@ public class HandbikeController : MonoBehaviour
             {
                 wheel.Rotate(Vector3.forward * spinSpeed * Time.fixedDeltaTime, Space.Self);
             }
+        }
+    }
+
+    void UpdateAudio(float speed, bool braking, float accelInput)
+    {
+        float speed01 = Mathf.Clamp01(Mathf.Abs(speed) / motorTorque);
+        float master = MasterVolume;
+        float dt = Time.deltaTime;
+        if (rollingAudio != null)
+        {
+            float target = speed01 * rollingMaxVolume * master;
+            rollingAudio.volume = Mathf.MoveTowards(rollingAudio.volume, target, audioFadeSpeed * dt);
+            rollingAudio.pitch = Mathf.Lerp(rollingMinPitch, rollingMaxPitch, speed01);
+        }
+
+        // plays when already moving then braking, not idle braking
+        if (brakeAudio != null)
+        {
+            bool brakeActive = braking && Mathf.Abs(speed) > brakeMinSpeed;
+            float target = brakeActive ? brakeMaxVolume * speed01 * master : 0f;
+            brakeAudio.volume = Mathf.MoveTowards(brakeAudio.volume, target, audioFadeSpeed * 2f * dt);
+        }
+
+        if (crankAudio != null)
+        {
+            float target = Mathf.Abs(accelInput) * master;
+            crankAudio.volume = Mathf.MoveTowards(crankAudio.volume, target, audioFadeSpeed * dt);
         }
     }
 
