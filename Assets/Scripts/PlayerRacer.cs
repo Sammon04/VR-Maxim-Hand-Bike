@@ -90,6 +90,7 @@ public class PlayerRacer : MonoBehaviour, IRacer
             {
                 currentCheckpointIndex = checkpoints.Count - 1;
                 finished = true;
+                Debug.Log("Finished");
                 bikeController.setControl(false);
                 return;
             }

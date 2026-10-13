@@ -23,6 +23,8 @@ public class RaceModeLogic : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countdownText;
 
     [SerializeField] private GameObject startButtonanvas;
+    [SerializeField] private GameObject finishCanvases;
+    [SerializeField] private TextMeshProUGUI congratsText;
 
     [Header("Other")]
     [SerializeField] private GameObject bike;
@@ -44,6 +46,7 @@ public class RaceModeLogic : MonoBehaviour
 
     private bool active = false;
     private bool countingDown = false;
+    private bool playerFinishedRace = false;
     private PlayerRacer playerRacer;
 
     private void Awake()
@@ -74,6 +77,7 @@ public class RaceModeLogic : MonoBehaviour
 
         playerBikeControls.enabled = false;
         raceModeUI.transform.SetParent(bike.transform, true);
+        finishCanvases.SetActive(false);
 
         foreach (var racer in racers)
         {
@@ -88,6 +92,7 @@ public class RaceModeLogic : MonoBehaviour
                 plrRacer.loopCheckpoints = totalLaps > 1;
             }
         }
+
     }
 
     private void Update()
@@ -119,6 +124,12 @@ public class RaceModeLogic : MonoBehaviour
             {
                 standingsText.text = newStandingsText;
             }
+        }
+
+        if (playerRacer.Finished && !playerFinishedRace)
+        {
+            playerFinishedRace = true;
+            DisplayCongrats();
         }
     }
 
@@ -169,6 +180,11 @@ public class RaceModeLogic : MonoBehaviour
     public int GetPosition(IRacer racer)
     {
         return standings.IndexOf(racer) + 1;
+    }
+
+    private string GetName(int position)
+    {
+        return standings[position - 1].RacerName;
     }
 
     public string GetStandingsText()
@@ -225,5 +241,30 @@ public class RaceModeLogic : MonoBehaviour
         float seconds = Mathf.CeilToInt(time % 60);
 
         countdownText.text = seconds.ToString();
+    }
+
+    private void DisplayCongrats()
+    {
+        finishCanvases.SetActive(true);
+
+        int playerPosition = GetPosition(playerRacer);
+        string congratsMessage = "";
+        
+        switch (playerPosition)
+        {
+            case 1: 
+                congratsMessage = "Congratulations, you won the race!";
+                break;
+            case 2: 
+                congratsMessage = "Good job! You came in second place!";
+                break;
+            case 3:
+                congratsMessage = "You came in third place. Could have been worse";
+                break;
+            default: 
+                congratsMessage = "Better luck next time, chief";
+                break;
+        }
+        congratsText.text = congratsMessage;
     }
 }
