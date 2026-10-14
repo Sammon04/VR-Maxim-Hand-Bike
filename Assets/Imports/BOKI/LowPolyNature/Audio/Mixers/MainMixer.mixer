@@ -14,6 +14,39 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-3758280705641191215
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Chain Sound
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: a22877acffb2b764d822eac0d72619e6
+  m_Children: []
+  m_Volume: 066989c4f650c6042bb8e2708894bd2c
+  m_Pitch: 9f707078f3ede1f4ba5a9e7138f8319e
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -1861287816899555477}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-1861287816899555477
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 17e4da270620ada428115f4c3315b59a
+  m_EffectName: Attenuation
+  m_MixLevel: ff37bd15ef5273743baedc8d5ae35ed9
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -34,6 +67,7 @@ AudioMixerController:
   - guids:
     - b519bbffa890795459aca891f61ea2ba
     - b35399df73323c840a3fb69e9e3e8d0d
+    - a22877acffb2b764d822eac0d72619e6
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -48,6 +82,7 @@ AudioMixerGroupController:
   m_GroupID: b519bbffa890795459aca891f61ea2ba
   m_Children:
   - {fileID: 3900043782488398811}
+  - {fileID: -3758280705641191215}
   m_Volume: 7d72da5f8b3177149ba04db3f859bd7b
   m_Pitch: 149d00d9393ab4a46a8a0634ffd0d01e
   m_Send: 00000000000000000000000000000000
@@ -81,9 +116,11 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 5357a0dace9822e4caf97f588daf5168
   m_FloatValues:
+    066989c4f650c6042bb8e2708894bd2c: -17.938717
     89b85137215d5044f87140d1bb33efb3: -10.34521
     ff6eba4c4e1149b43a3fae39ff1dad9f: 20
     570894adac082a742ac91e496ff3c15c: 10.437403
+    55369c0e4dc7be64db69f98510915953: -12.498478
     a939eedffdf653145b7651eef794b8b8: -10.345207
   m_TransitionOverrides: {}
 --- !u!243 &3900043782488398811
