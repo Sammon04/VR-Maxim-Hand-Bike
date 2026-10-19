@@ -40,6 +40,6 @@ public class vignetteController : MonoBehaviour
             canvas.alpha = 1;
         }
         scaleFactor = minScale + (maxScale - minScale) * (1 - settings.vignetteStrength);
-        vignetteRect.localScale = Vector3.one * scaleFactor;
+        vignetteRect.localScale = new Vector3(1.2f, 1f, 1f) * scaleFactor;
     }
 }

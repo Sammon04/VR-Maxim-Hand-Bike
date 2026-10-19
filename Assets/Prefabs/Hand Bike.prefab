@@ -3257,9 +3257,21 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1422321009443492186, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3e7e0ef00cc7fe444a26344783a0af8d, type: 3}
     - target: {fileID: 4774731305052962551, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278160137123587277, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278160137123587277, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6332679489361323149, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
       propertyPath: m_Camera
