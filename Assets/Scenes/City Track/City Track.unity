@@ -6927,6 +6927,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2371730645368440631, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6193281168116514685, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Name
       value: Hand Bike
