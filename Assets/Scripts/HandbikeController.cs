@@ -207,8 +207,14 @@ public class HandbikeController : MonoBehaviour
         float speedFactor = Mathf.Clamp01(Mathf.Abs(currentSpeed) / motorTorque);
 
         Quaternion turnDelta = Quaternion.Euler(0f, steerInput * maxSteerAngle * speedFactor * Time.fixedDeltaTime, 0f);
+        /* Completely prevents all Z-axis rotation.
+        Helps with not jumping over invisible walls, but turning on slopes can look weird now
+        Quaternion newRotation = rb.rotation * turnDelta;
+        Vector3 euler = newRotation.eulerAngles;
+        euler.z = 0f;
+        rb.MoveRotation(Quaternion.Euler(euler));*/
         rb.MoveRotation(rb.rotation * turnDelta);
-
+        
         Vector3 forward = transform.forward * currentSpeed;    
         rb.linearVelocity = new Vector3(forward.x, rb.linearVelocity.y, forward.z);
         rb.AddForce(Vector3.down * groundContactForce, ForceMode.Acceleration);
