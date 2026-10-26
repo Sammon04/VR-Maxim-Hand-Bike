@@ -57,6 +57,37 @@ public class AIRacer : MonoBehaviour, IRacer
     [Tooltip("List of transforms for rotating the wheel components")]
     [SerializeField] private Transform[] wheels;
 
+    [Header("Audio")]
+    [Tooltip("Looping rolling/wheel sound. Set Loop = true on the source.")]
+    public AudioSource rollingAudio;
+
+    [Tooltip("Looping brake squeal. Set Loop = ture on the source.")]
+    public AudioSource brakeAudio;
+
+    [Tooltip("Looping Chain/Cranking sounds while cranking")]
+    public AudioSource crankAudio;
+
+    [Tooltip("Audio for collision impact sounds")]
+    public AudioSource impactAudio;
+
+    [SerializeField] private float minImpactVelocity = 1.5f;
+    [SerializeField] private float impactCooldown = 0.4f;
+    [SerializeField] private float rollingMaxVolume = 0.8f;
+    [SerializeField] private float rollingMinPitch = 0.7f;
+    [SerializeField] private float rollingMaxPitch = 1.4f;
+    [SerializeField] private float brakeMaxVolume = 1f;
+    [SerializeField] private float brakeMinSpeed = 1f;
+    [SerializeField] private float audioFadeSpeed = 6f;
+
+
+    [Tooltip("Drag GameSettings Asset here")]
+    [SerializeField] private GameSettings gameSettings;
+
+    private float MasterVolume => gameSettings != null ? gameSettings.masterVolume : 1f;
+    private float lastImpactTime;
+    private bool isBraking;
+    private float pitchVariation = 1f;
+
     /*
     IRacer values.
     These are updated internally by this script and read by RaceModeLogic
@@ -101,8 +132,18 @@ public class AIRacer : MonoBehaviour, IRacer
         RaceModeLogic.Instance.Register(this);
         currentTargetSpeed = targetSpeed;
         SetTargetSpeed();
-    }
+        pitchVariation = Random.Range(0.95f, 1.05f);
 
+        foreach (var src in new[] { rollingAudio, brakeAudio, crankAudio, impactAudio })
+        {
+            if (src == null) continue;
+            src.spatialBlend = 1f; // 3D, so each AI racer is heard from its position
+            src.loop = (src != impactAudio);
+            src.volume = (src == impactAudio) ? 1f : 0f;
+            if (src != impactAudio && !src.isPlaying) src.Play();
+            if (crankAudio != null) crankAudio.pitch = pitchVariation;
+        }
+    }
     private void OnDestroy()
     {
         if (RaceModeLogic.Instance != null)
@@ -113,7 +154,10 @@ public class AIRacer : MonoBehaviour, IRacer
 
     private void FixedUpdate()
     {
-        if (checkpoints.Count == 0 || finished || !active) return;
+        if (checkpoints.Count == 0 || finished || !active) {
+            isBraking = false;
+            return;
+        } 
 
         Vector3 toTarget = currentTargetPoint - rb.position;
         distanceToTarget = toTarget.magnitude;
@@ -223,6 +267,8 @@ public class AIRacer : MonoBehaviour, IRacer
             );
         }
 
+        isBraking = allowedSpeed < currentTargetSpeed * 0.95f && rb.linearVelocity.magnitude >= allowedSpeed * 0.95f;
+
         if (rb.linearVelocity.magnitude > allowedSpeed)
         {
             rb.linearVelocity =
@@ -312,6 +358,43 @@ public class AIRacer : MonoBehaviour, IRacer
         return checkpoint.TransformPoint(box.center);
     }
 
+    private void UpdateAudio()
+    {
+        float speed = rb.linearVelocity.magnitude;
+        float maxSpeed = targetSpeed + maxSpeedVariance;
+        float speed01 = Mathf.Clamp01(speed / maxSpeed);
+        float master = MasterVolume;
+        float dt = Time.deltaTime;
+
+        bool driving = active && !finished;
+
+        if (rollingAudio != null)
+        {
+            float target = speed01 * rollingMaxVolume * master;
+            rollingAudio.volume = Mathf.MoveTowards(rollingAudio.volume, target, audioFadeSpeed * dt);
+            rollingAudio.pitch = Mathf.Lerp(rollingMinPitch, rollingMaxPitch, speed01) * pitchVariation;
+        }
+
+        if (brakeAudio != null)
+        {
+            bool brakeActive = isBraking && speed > brakeMinSpeed;
+            float target = brakeActive ? brakeMaxVolume * speed01 * master : 0f;
+            brakeAudio.volume = Mathf.MoveTowards(brakeAudio.volume, target, audioFadeSpeed * 2f * dt);
+        }
+
+        if (crankAudio != null)
+        {
+            // Cranking while driving and not braking
+            float target = (driving && !isBraking) ? master : 0f;
+            crankAudio.volume = Mathf.MoveTowards(crankAudio.volume, target, audioFadeSpeed * dt);
+        }
+    }
+
+    private void Update()
+    {
+        UpdateAudio();
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (checkpoints.Count == 0 || currentCheckpointIndex >= checkpoints.Count) return;
@@ -323,5 +406,20 @@ public class AIRacer : MonoBehaviour, IRacer
         Gizmos.DrawWireSphere(gizmoTarget, checkpointReachDistance);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(gizmoTarget, lookAheadSlowdownDistance);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (impactAudio == null || impactAudio.clip == null) return;
+        if (Time.time < lastImpactTime + impactCooldown) return;
+        if (collision.gameObject.CompareTag("Ground")) return;
+
+        float impact = collision.relativeVelocity.magnitude;
+        if (impact > minImpactVelocity)
+        {
+            float volume = Mathf.Clamp01(impact / 10f) * MasterVolume;
+            impactAudio.PlayOneShot(impactAudio.clip, volume);
+            lastImpactTime = Time.time;
+        }
     }
 }
