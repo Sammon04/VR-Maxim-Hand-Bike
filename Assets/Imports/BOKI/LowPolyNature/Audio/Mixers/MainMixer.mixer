@@ -20,7 +20,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Chain Sound
+  m_Name: Bike - Chain Sound
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: a22877acffb2b764d822eac0d72619e6
   m_Children: []
@@ -100,6 +100,8 @@ AudioMixerController:
     - 145abd386763d6e41b709a5f6fa71976
     - 6ef117e0462990d489f3463a980fcd0d
     - 812d0198b2ad5324a85cde7d561a22f4
+    - e49a3e71015efdd42963817923e62830
+    - c0523aa3483c8894b9e72604b172c761
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -119,6 +121,8 @@ AudioMixerGroupController:
   - {fileID: 5425994947348771148}
   - {fileID: 556960580833943565}
   - {fileID: 7191318910718064907}
+  - {fileID: 458211664712008726}
+  - {fileID: 4894798780267050659}
   m_Volume: 7d72da5f8b3177149ba04db3f859bd7b
   m_Pitch: 149d00d9393ab4a46a8a0634ffd0d01e
   m_Send: 00000000000000000000000000000000
@@ -154,7 +158,9 @@ AudioMixerSnapshotController:
   m_FloatValues:
     bcddf8f08dfd55b478409858da2f92f3: -19.255655
     4beeb0617a5314d42b97fd38c8ba3ab9: -21.302511
+    1ec42a42e0383e04490d248261509b72: -12.498478
     b35c41a2fe55e184187ec33d4c816abd: -11.738058
+    ebd336333d8f2244d82f21738dedace0: 7.3797894
     f777fb83a4c145048a40dbb8c608b170: -30.320126
     066989c4f650c6042bb8e2708894bd2c: -19.928473
     f55093464edbe8d45879df1354056c9b: -10.345207
@@ -164,6 +170,25 @@ AudioMixerSnapshotController:
     55369c0e4dc7be64db69f98510915953: -12.498478
     a939eedffdf653145b7651eef794b8b8: -10.345207
   m_TransitionOverrides: {}
+--- !u!243 &458211664712008726
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Menu/Forest - Bird Ambience
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: e49a3e71015efdd42963817923e62830
+  m_Children: []
+  m_Volume: ebd336333d8f2244d82f21738dedace0
+  m_Pitch: 81628f5018f0fe94d8d5ddddc441baa5
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 7354887534084361071}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &556960580833943565
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -183,13 +208,32 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &4894798780267050659
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Button Clicks
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: c0523aa3483c8894b9e72604b172c761
+  m_Children: []
+  m_Volume: 1ec42a42e0383e04490d248261509b72
+  m_Pitch: 01a43ef287425544a962047372647494
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 7632761417612512844}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &5425994947348771148
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Gravel Sound
+  m_Name: Bike - Gravel Sound
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 145abd386763d6e41b709a5f6fa71976
   m_Children: []
@@ -208,7 +252,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Brake Squeal
+  m_Name: Bike - Brake Squeal
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 2474f0e3440d4844da08434fcaea8dec
   m_Children: []
@@ -260,7 +304,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Collision Sound
+  m_Name: Bike - Collision Sound
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 37a9308213706a2428ec7b76f19d5883
   m_Children: []
@@ -273,6 +317,34 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &7354887534084361071
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: fc55c050ba884f34c9918f3be8b924ed
+  m_EffectName: Attenuation
+  m_MixLevel: 3d0202d011296094ba5a3b8d97ece497
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &7632761417612512844
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 85f8ee9061e7cad4fa199b85ab90ad19
+  m_EffectName: Attenuation
+  m_MixLevel: d77be2bea46e6f14fab076a46e61fe03
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &7698890041973822704
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
