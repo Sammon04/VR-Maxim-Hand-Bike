@@ -10,7 +10,7 @@ public class SettingsMenu : MonoBehaviour
 
     void Start()
     {
-        vignetteSlider.value = settings.vignetteStrength;
-        volumeSlider.value = settings.masterVolume;
+        vignetteSlider.SetValueWithoutNotify(settings.vignetteStrength);
+        volumeSlider.SetValueWithoutNotify(settings.masterVolume);
     }
 }

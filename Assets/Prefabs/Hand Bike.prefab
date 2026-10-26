@@ -1808,7 +1808,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6193281168116514685}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2f39cd4f9763013458c316cb14c099cb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1940,7 +1940,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6193281168116514685}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db043ace20c9794419248775967d19aa, type: 3}
   m_Name: 
@@ -3826,9 +3826,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1422321009443492186, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3e7e0ef00cc7fe444a26344783a0af8d, type: 3}
     - target: {fileID: 4774731305052962551, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278160137123587277, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5278160137123587277, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6332679489361323149, guid: 1df851f4fb915354b9bda161c77667ad, type: 3}
       propertyPath: m_Camera

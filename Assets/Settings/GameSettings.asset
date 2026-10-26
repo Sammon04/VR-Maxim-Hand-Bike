@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac31b2e22ed2d34daa0c2e24efa6244, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: Assembly-CSharp::GameSettings
-  vignetteStrength: 1
+  vignetteStrength: 0
   masterVolume: 1

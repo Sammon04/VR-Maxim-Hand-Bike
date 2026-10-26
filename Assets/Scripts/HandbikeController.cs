@@ -112,6 +112,9 @@ public class HandbikeController : MonoBehaviour
 
     Quaternion crankVisualRestRotation = Quaternion.identity;
 
+    //Boolean that determines if the player can control the bike
+    private bool canControl = true;
+
     void OnEnable()
     {
         leftGripHeld.action?.Enable();
@@ -158,90 +161,94 @@ public class HandbikeController : MonoBehaviour
         float steerInput = 0f;
         bool braking = false;
 
-        // --- KEYBOARD FALLBACK ---
-        if (keyboard != null)
+        if (canControl)
         {
-            if (keyboard.wKey.isPressed) accelInput += 1f;
-            if (keyboard.sKey.isPressed) accelInput -= 1f;
-            if (keyboard.dKey.isPressed) steerInput += 1f;
-            if (keyboard.aKey.isPressed) steerInput -= 1f;
-            if (keyboard.spaceKey.isPressed) braking = true;
-        }
-
-        // ---CHECKS IF BOTH HANDS ARE ON THE CRANK---
-        bool handsOnCrank = leftHandTransform != null && rightHandTransform != null && crankZoneCenter != null &&
-            Vector3.Distance(leftHandTransform.position, crankZoneCenter.position) <= crankZoneRadius &&
-            Vector3.Distance(rightHandTransform.position, crankZoneCenter.position) <= crankZoneRadius;
-        if (handsOnCrank)
-        {
-            bool bothGripsHeld = 
-                leftGripHeld.action != null && leftGripHeld.action.IsPressed() &&
-                rightGripHeld.action != null && rightGripHeld.action.IsPressed();
-            if (bothGripsHeld)
+            // --- KEYBOARD FALLBACK ---
+            if (keyboard != null)
             {
-                // physical line connecting the left hand to the right hand
-                Vector3 handsVector = rightHandTransform.position - leftHandTransform.position;
+                if (keyboard.wKey.isPressed) accelInput += 1f;
+                if (keyboard.sKey.isPressed) accelInput -= 1f;
+                if (keyboard.dKey.isPressed) steerInput += 1f;
+                if (keyboard.aKey.isPressed) steerInput -= 1f;
+                if (keyboard.spaceKey.isPressed) braking = true;
+            }
 
-                // converts the distance to bike's local space
-                Vector3 localhandsVector = transform.InverseTransformDirection(handsVector);
-
-                // calculates the angle of the line
-                float currentCrankAngle = Mathf.Atan2(localhandsVector.y, localhandsVector.z) * Mathf.Rad2Deg;
-
-                // spin the visual crank arm to match where the hands currently are
-                if (crankVisual != null)
-                    crankVisual.localRotation = crankVisualRestRotation * Quaternion.AngleAxis(currentCrankAngle, crankVisualAxis);
-
-                if (wasGrabbing)
+            // ---CHECKS IF BOTH HANDS ARE ON THE CRANK---
+            bool handsOnCrank = leftHandTransform != null && rightHandTransform != null && crankZoneCenter != null &&
+                Vector3.Distance(leftHandTransform.position, crankZoneCenter.position) <= crankZoneRadius &&
+                Vector3.Distance(rightHandTransform.position, crankZoneCenter.position) <= crankZoneRadius;
+            if (handsOnCrank)
+            {
+                bool bothGripsHeld =
+                    leftGripHeld.action != null && leftGripHeld.action.IsPressed() &&
+                    rightGripHeld.action != null && rightGripHeld.action.IsPressed();
+                if (bothGripsHeld)
                 {
-                    // finds how much the hands rotated since the last frame
-                    float angleDelta = Mathf.DeltaAngle(previousCrankAngle, currentCrankAngle);
+                    // physical line connecting the left hand to the right hand
+                    Vector3 handsVector = rightHandTransform.position - leftHandTransform.position;
 
-                    // inverts the direction if necessary
-                    if (reverseCrankDirection) angleDelta *= -1f;
+                    // converts the distance to bike's local space
+                    Vector3 localhandsVector = transform.InverseTransformDirection(handsVector);
 
-                    // converts to speed (in degrees per second) and mapt to -1 to 1
-                    float crankSpeed = angleDelta / Time.fixedDeltaTime;
-                    float vrAccel = Mathf.Clamp(crankSpeed / maxCrankDegreesPerSec, -1f, 1f);
+                    // calculates the angle of the line
+                    float currentCrankAngle = Mathf.Atan2(localhandsVector.y, localhandsVector.z) * Mathf.Rad2Deg;
 
-                    if (Mathf.Abs(vrAccel) > Mathf.Abs(accelInput))
-                        accelInput = vrAccel;
+                    // spin the visual crank arm to match where the hands currently are
+                    if (crankVisual != null)
+                        crankVisual.localRotation = crankVisualRestRotation * Quaternion.AngleAxis(currentCrankAngle, crankVisualAxis);
+
+                    if (wasGrabbing)
+                    {
+                        // finds how much the hands rotated since the last frame
+                        float angleDelta = Mathf.DeltaAngle(previousCrankAngle, currentCrankAngle);
+
+                        // inverts the direction if necessary
+                        if (reverseCrankDirection) angleDelta *= -1f;
+
+                        // converts to speed (in degrees per second) and mapt to -1 to 1
+                        float crankSpeed = angleDelta / Time.fixedDeltaTime;
+                        float vrAccel = Mathf.Clamp(crankSpeed / maxCrankDegreesPerSec, -1f, 1f);
+
+                        if (Mathf.Abs(vrAccel) > Mathf.Abs(accelInput))
+                            accelInput = vrAccel;
+                    }
+
+                    previousCrankAngle = currentCrankAngle;
+                    wasGrabbing = true;
+                }
+                else
+                {
+                    wasGrabbing = false;
+                }
+                // ---VR STEERING: push the midpoint of your hands sideways relative to the bike ---
+                Vector3 handsMidpoint = (leftHandTransform.position + rightHandTransform.position) * 0.5f;
+                Vector3 localOffset = transform.InverseTransformPoint(handsMidpoint) - transform.InverseTransformPoint(crankZoneCenter.position);
+
+                float rawOffset = localOffset.x;
+                float vrSteer = 0f;
+                if (Mathf.Abs(rawOffset) > steerDeadzone && maxSteerHandOffset > steerDeadzone)
+                {
+                    float sign = Mathf.Sign(rawOffset);
+                    float remapped = (Mathf.Abs(rawOffset) - steerDeadzone) / (maxSteerHandOffset - steerDeadzone);
+                    vrSteer = sign * Mathf.Clamp01(remapped);
                 }
 
-                previousCrankAngle = currentCrankAngle;
-                wasGrabbing = true;
+                if (Mathf.Abs(vrSteer) > Mathf.Abs(steerInput))
+                {
+                    steerInput = vrSteer;
+                }
+
             }
             else
             {
+                // Hands left the crank zone entirely - reset tracking so it doesn't jump when they come back into the zone
                 wasGrabbing = false;
             }
-            // ---VR STEERING: push the midpoint of your hands sideways relative to the bike ---
-            Vector3 handsMidpoint = (leftHandTransform.position + rightHandTransform.position) * 0.5f;
-            Vector3 localOffset = transform.InverseTransformPoint(handsMidpoint) - transform.InverseTransformPoint(crankZoneCenter.position);
 
-            float rawOffset = localOffset.x;
-            float vrSteer = 0f;
-            if (Mathf.Abs(rawOffset) > steerDeadzone && maxSteerHandOffset > steerDeadzone)
-            {
-                float sign = Mathf.Sign(rawOffset);
-                float remapped = (Mathf.Abs(rawOffset) - steerDeadzone) / (maxSteerHandOffset - steerDeadzone);
-                vrSteer = sign * Mathf.Clamp01(remapped);
-            }
-
-            if (Mathf.Abs(vrSteer) > Mathf.Abs(steerInput)) {
-                steerInput = vrSteer;
-            }
-               
+            // --- VR BRAKING & STEERING ---
+            if (brakeHeld.action != null && brakeHeld.action.IsPressed())
+                braking = true;
         }
-        else
-        {
-            // Hands left the crank zone entirely - reset tracking so it doesn't jump when they come back into the zone
-            wasGrabbing = false;
-        }
-
-        // --- VR BRAKING & STEERING ---
-        if (brakeHeld.action != null && brakeHeld.action.IsPressed())
-            braking = true;
 
         // --- MOVEMENT EXECUTION ---
         
@@ -253,8 +260,14 @@ public class HandbikeController : MonoBehaviour
         float speedFactor = Mathf.Clamp01(Mathf.Abs(currentSpeed) / motorTorque);
 
         Quaternion turnDelta = Quaternion.Euler(0f, steerInput * maxSteerAngle * speedFactor * Time.fixedDeltaTime, 0f);
+        /* Completely prevents all Z-axis rotation.
+        Helps with not jumping over invisible walls, but turning on slopes can look weird now
+        Quaternion newRotation = rb.rotation * turnDelta;
+        Vector3 euler = newRotation.eulerAngles;
+        euler.z = 0f;
+        rb.MoveRotation(Quaternion.Euler(euler));*/
         rb.MoveRotation(rb.rotation * turnDelta);
-
+        
         Vector3 forward = transform.forward * currentSpeed;    
         rb.linearVelocity = new Vector3(forward.x, rb.linearVelocity.y, forward.z);
         rb.AddForce(Vector3.down * groundContactForce, ForceMode.Acceleration);
@@ -316,13 +329,13 @@ public class HandbikeController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+
         if (impactAudio == null || impactAudio.clip == null) return;
 
         //  Check if enough time has passed since the last sound played
         if (Time.time < lastImpactTime + impactCooldown) return;
 
-       
+
         if (collision.gameObject.CompareTag("Ground")) return;
 
         if (collision.relativeVelocity.magnitude > minImpactVelocity)
@@ -333,6 +346,15 @@ public class HandbikeController : MonoBehaviour
             impactAudio.PlayOneShot(impactAudio.clip, finalVolume);
 
             lastImpactTime = Time.time;
+        }
+    }
+    public void setControl(bool enabled)
+    {
+        canControl = enabled;
+
+        if (!enabled)
+        {
+            wasGrabbing = false;
         }
     }
 

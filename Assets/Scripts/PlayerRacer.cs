@@ -37,23 +37,12 @@ public class PlayerRacer : MonoBehaviour, IRacer
 
     [HideInInspector] public int totalLaps = 1; // Set externally by RaceModeLogic.
     
-    private HandbikeController bikeControls => GetComponent<HandbikeController>();
+    private HandbikeController bikeController => GetComponent<HandbikeController>();
     
     private Vector3 currentTargetPoint;
 
     private void Awake()
     {
-        // The bike can load into non-race gamemodes, where there's no active
-        // RaceModeLogic to register with. Disabling the component here means
-        // Start/FixedUpdate never run in that case, so nothing below has to
-        // guard against a missing race manager.
-        /*
-        if (ModeSettings.Mode != GameMode.NPCRace)
-        {
-            enabled = false;
-            return;
-        }
-        */
 
         if (checkpoints.Count > 0)
         {
@@ -61,12 +50,15 @@ public class PlayerRacer : MonoBehaviour, IRacer
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        RaceModeLogic.Instance.Register(this);
+        if (RaceModeLogic.Instance != null)
+        {
+            RaceModeLogic.Instance.Register(this);
+        }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (RaceModeLogic.Instance != null)
         {
@@ -98,7 +90,8 @@ public class PlayerRacer : MonoBehaviour, IRacer
             {
                 currentCheckpointIndex = checkpoints.Count - 1;
                 finished = true;
-                bikeControls.enabled = false;
+                Debug.Log("Finished");
+                bikeController.setControl(false);
                 return;
             }
 
