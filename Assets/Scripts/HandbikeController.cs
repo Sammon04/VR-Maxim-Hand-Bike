@@ -1,8 +1,5 @@
-using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(Rigidbody))]
 public class HandbikeController : MonoBehaviour
@@ -94,14 +91,6 @@ public class HandbikeController : MonoBehaviour
     float lastImpactTime = 0f;
     [Tooltip("Sets the cooldown for the collision sounds playing")]
     public float impactCooldown = 0.4f;
-
-    [Header("Game Settings")]
-    [Tooltip("Drag GameSettings Asset here")]
-    public GameSettings gameSettings;
-
-    float MasterVolume => gameSettings != null ? gameSettings.masterVolume : 1f;
-    float brakeVolumeCurrent;
-    
 
     Rigidbody rb;
     Keyboard keyboard;
@@ -303,11 +292,10 @@ public class HandbikeController : MonoBehaviour
     void UpdateAudio(float speed, bool braking, float accelInput)
     {
         float speed01 = Mathf.Clamp01(Mathf.Abs(speed) / motorTorque);
-        float master = MasterVolume;
         float dt = Time.deltaTime;
         if (rollingAudio != null)
         {
-            float target = speed01 * rollingMaxVolume * master;
+            float target = speed01 * rollingMaxVolume;
             rollingAudio.volume = Mathf.MoveTowards(rollingAudio.volume, target, audioFadeSpeed * dt);
             rollingAudio.pitch = Mathf.Lerp(rollingMinPitch, rollingMaxPitch, speed01);
         }
@@ -316,13 +304,13 @@ public class HandbikeController : MonoBehaviour
         if (brakeAudio != null)
         {
             bool brakeActive = braking && Mathf.Abs(speed) > brakeMinSpeed;
-            float target = brakeActive ? brakeMaxVolume * speed01 * master : 0f;
+            float target = brakeActive ? brakeMaxVolume * speed01 : 0f;
             brakeAudio.volume = Mathf.MoveTowards(brakeAudio.volume, target, audioFadeSpeed * 2f * dt);
         }
 
         if (crankAudio != null)
         {
-            float target = Mathf.Abs(accelInput) * master;
+            float target = Mathf.Abs(accelInput);
             crankAudio.volume = Mathf.MoveTowards(crankAudio.volume, target, audioFadeSpeed * dt);
         }
     }
@@ -341,9 +329,8 @@ public class HandbikeController : MonoBehaviour
         if (collision.relativeVelocity.magnitude > minImpactVelocity)
         {
             float impactForceFactor = Mathf.Clamp01(collision.relativeVelocity.magnitude / 10f);
-            float finalVolume = impactForceFactor * MasterVolume;
 
-            impactAudio.PlayOneShot(impactAudio.clip, finalVolume);
+            impactAudio.PlayOneShot(impactAudio.clip, impactForceFactor);
 
             lastImpactTime = Time.time;
         }
