@@ -4651,7 +4651,7 @@ Transform:
   m_GameObject: {fileID: 292544521}
   serializedVersion: 2
   m_LocalRotation: {x: 0.47190845, y: 0.49997616, z: 0.498958, w: 0.5276052}
-  m_LocalPosition: {x: 0.0944, y: -0.0329, z: 0.0939}
+  m_LocalPosition: {x: 0.0009, y: -0.0402, z: 0.0885}
   m_LocalScale: {x: -0.79999995, y: 0.8, z: 0.79999995}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6521,7 +6521,7 @@ Transform:
   m_GameObject: {fileID: 412354518}
   serializedVersion: 2
   m_LocalRotation: {x: -0.498483, y: -0.52805394, z: 0.47243133, w: 0.49948215}
-  m_LocalPosition: {x: 0.0756, y: -0.0285, z: 0.0994}
+  m_LocalPosition: {x: -0.0009, y: -0.0402, z: 0.0885}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.79999995}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16668,15 +16668,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.141
+      value: 0.0198
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.001
+      value: -0.0107
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.072
+      value: 0.1025
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalRotation.w
@@ -32934,7 +32934,6 @@ MonoBehaviour:
   brakeMinSpeed: 1
   audioFadeSpeed: 6
   impactCooldown: 0.4
-  gameSettings: {fileID: 0}
 --- !u!65 &2045227033
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -79948,6 +79948,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1578808674}
     - target: {fileID: 9094299065522858717, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
+      propertyPath: totalLaps
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9094299065522858717, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
+      propertyPath: congratsText
+      value: 
+      objectReference: {fileID: 1447751723}
+    - target: {fileID: 9094299065522858717, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
+      propertyPath: finishCanvases
+      value: 
+      objectReference: {fileID: 1068419284}
+    - target: {fileID: 9094299065522858717, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
       propertyPath: playerBikeControls
       value: 
       objectReference: {fileID: 1578808676}
@@ -94423,6 +94435,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.855815, y: 1.2367613, z: 0.8568717}
   m_Center: {x: -0.00000008940697, y: 0.6214112, z: 0.000008523464}
+--- !u!1 &1068419284 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3406479572280230289, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
+  m_PrefabInstance: {fileID: 482969750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1068732261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96249,6 +96266,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2182836387240649592, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2371730645368440631, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -96261,9 +96282,21 @@ PrefabInstance:
       propertyPath: settingsMenu
       value: 
       objectReference: {fileID: 702323596}
+    - target: {fileID: 5054407740175331777, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: maxVelocity
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: motorTorque
-      value: 20
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5231625158102619163, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
+      propertyPath: groundContactForce
+      value: 175
       objectReference: {fileID: 0}
     - target: {fileID: 6068128577299321748, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -96295,7 +96328,7 @@ PrefabInstance:
       objectReference: {fileID: 487359980}
     - target: {fileID: 6925131287153284057, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6976956179821485080, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_AnchorMax.y
@@ -104254,6 +104287,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.000001, y: 4.3357325, z: 0.27}
   m_Center: {x: 0.0000019073486, y: 2.1678643, z: -0.01}
+--- !u!114 &1447751723 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1173212443598524054, guid: 429d30ffb52594b4e9cca492410d949a, type: 3}
+  m_PrefabInstance: {fileID: 482969750}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &1461721702
 PrefabInstance:
   m_ObjectHideFlags: 0
