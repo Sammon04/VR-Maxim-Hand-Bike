@@ -3,6 +3,9 @@ using TMPro;
 
 public class TutorialManager : MonoBehaviour
 {
+
+    [SerializeField] private HandbikeController playerBikeControls;
+
     public TextMeshProUGUI instructionText;
     public string[] steps;
     private int currentStep = 0;
@@ -30,5 +33,10 @@ public class TutorialManager : MonoBehaviour
     public void NextStep()
     {
         ShowStep(currentStep + 1);
+
+        if (currentStep == steps.Length - 1)
+        {
+            playerBikeControls.setControl(false);
+        }
     }
 }

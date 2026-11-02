@@ -4,7 +4,8 @@ public enum GameMode
 {
     TimeTrial,
     NPCRace,
-    Casual
+    Casual,
+    None
 }
 
 public static class ModeSettings
