@@ -7109,13 +7109,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
   playerBikeControls: {fileID: 1458129929}
+  rightGripHeld:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Right Grip Held
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 5d50a2ba-3883-4916-ad8e-9c2bfd60931b
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: e9af1e8b-6290-4721-afa7-fa83fbd444a2
+        m_Path: <OculusTouchController>{LeftHand}/gripPressed
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Right Grip Held
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  leftGripHeld:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Left Grip Held
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: a9151060-c1b8-44f4-a894-1072319fae4a
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 4f0371e0-3121-44f4-9b2d-da77b737dd60
+        m_Path: <OculusTouchController>{RightHand}/gripPressed
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Left Grip Held
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   instructionText: {fileID: 85789088}
   steps:
-  - Welcome! Grab the handlebars to begin
-  - Pedal in a circular motion to accelerate.
-  - Hold down the space bar to break, then continue pedaling.
-  - Turn the handlebars to steer around the curve.
-  - Faster motion Equals Faster movement!
+  - Welcome! Grab the handlebars with the side grips to begin.
+  - Hold the grips and pedal in a circular motion to accelerate.
+  - Hold down the front triggers to brake, then continue pedaling.
+  - Move your controllers sideways to turn.
+  - Press B on the right controller to pause.
   - You have completed the tutorial! Head back to the main menu to select other scenes.
 --- !u!4 &1138606810
 Transform:
@@ -7348,6 +7388,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 33bbba6bc07665640b844e1b81d2e458, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 33bbba6bc07665640b844e1b81d2e458, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 33bbba6bc07665640b844e1b81d2e458, type: 3}
       propertyPath: m_Name
@@ -8267,7 +8311,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 761ac6449add9834faf07e845a01ed91, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.66535
+      value: 7.68
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 761ac6449add9834faf07e845a01ed91, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8784,7 +8828,7 @@ PrefabInstance:
     - target: {fileID: 1540332774212590717, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_CameraFloorOffsetObject
       value: 
-      objectReference: {fileID: 2075743498}
+      objectReference: {fileID: 2023643800}
     - target: {fileID: 1547283906074772638, guid: 9fe1de8f4293464488a34233b8c56e65, type: 3}
       propertyPath: m_Size.y
       value: 0.8985921
@@ -11007,7 +11051,7 @@ GameObject:
   - component: {fileID: 1793001051}
   - component: {fileID: 1793001050}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: TutorialCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

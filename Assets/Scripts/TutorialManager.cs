@@ -1,14 +1,29 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TutorialManager : MonoBehaviour
 {
 
     [SerializeField] private HandbikeController playerBikeControls;
+    [SerializeField] private InputActionProperty rightGripHeld;
+    [SerializeField] private InputActionProperty leftGripHeld;
 
     public TextMeshProUGUI instructionText;
     public string[] steps;
     private int currentStep = 0;
+
+    private void OnEnable()
+    {
+        rightGripHeld.action.Enable();
+        leftGripHeld.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        rightGripHeld.action.Disable();
+        leftGripHeld.action.Disable();
+    }
 
     void Start()
     {
@@ -17,9 +32,12 @@ public class TutorialManager : MonoBehaviour
 
     void Update()
     {
-        if (currentStep == 0 && Input.anyKeyDown)
+        if (currentStep == 0)
         {
-            NextStep();
+            if (rightGripHeld.action.ReadValue<float>() > 0.5f && leftGripHeld.action.ReadValue<float>() > 0.5f)
+            {
+                NextStep();
+            }
         }
     }
 
