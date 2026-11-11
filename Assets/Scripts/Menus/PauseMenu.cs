@@ -82,10 +82,6 @@ public class PauseMenu : MonoBehaviour
 
         Application.Quit();
 
-        if (Application.isEditor)
-        {
-            UnityEditor.EditorApplication.isPlaying = false;
-        }
     }
 
     public void RestartScene()
